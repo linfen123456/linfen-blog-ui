@@ -8,6 +8,16 @@ import Layout from '@/views/layout/Layout'
 // 公共路由
 export const constantRoutes = [
   {
+    path: '',
+    redirect: '/index',
+    component: Layout
+  },
+  {
+    path: '/index',
+    component: () => import('@/views/index/index'),
+    hidden: true
+  },
+  {
     path: '/redirect',
     component: Layout,
     hidden: true,
@@ -44,13 +54,13 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '',
+    path: '/admin',
     component: Layout,
-    redirect: 'index',
+    redirect: '/admin',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/index/index'),
+        path: '/admin',
+        component: () => import('@/views/index/home'),
         name: 'Dashboard',
         meta: { title: '主页', icon: 'dashboard', noCache: true, affix: true }
       }

@@ -8,14 +8,14 @@
         class="filter-item"
         style="width: 200px;"
         size="small"
-        placeholder="请输入租户名称"
+        placeholder="请输入分类名称"
         @keyup.enter.native="handleFind"
       />
       <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFind">查询
       </el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-refresh" size="small" @click="handleReset">重置
       </el-button>
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">添加租户</el-button>
+      <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">添加分类</el-button>
     </div>
 
     <el-table v-loading="loading" :data="tableData" border style="width: 100%">
@@ -27,35 +27,28 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="租户名称" width="120" align="center">
+      <el-table-column label="名称" width="150" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="租户编号" width="150" align="center">
+
+      <el-table-column label="描述" width="250" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.code }}</span>
+          <el-popover
+            placement="top"
+            title="描述"
+            width="200"
+            trigger="hover">
+            {{ scope.row.descriptions}}
+            <span slot="reference">{{ scope.row.descriptions === ""||(scope.row.descriptions.length < 20) ? scope.row.descriptions :scope.row.descriptions.substring(0,20)+'...'  }}</span>
+          </el-popover>
         </template>
       </el-table-column>
 
-      <el-table-column label="授权开始时间" width="160" align="center">
+      <el-table-column label="创建时间" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="授权结束时间" width="160" align="center">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.endTime) }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="状态" width="160" align="center">
-        <template slot-scope="scope">
-          <div>
-            <el-tag v-if="scope.row.status === 0" size="small">正常</el-tag>
-            <el-tag v-else-if="scope.row.status === 9" size="small" type="info">停用</el-tag>
-          </div>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
 
@@ -81,7 +74,7 @@
 
     <!-- 新增修改界面 -->
     <el-dialog
-      :title="!dataForm.id ? '新增租户' : '修改租户'"
+      :title="!dataForm.id ? '新增分类' : '修改分类'"
       width="40%"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
@@ -95,36 +88,14 @@
         style="text-align:left;"
         @keyup.enter.native="submitForm()"
       >
-        <el-form-item label="租户名称" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.name" placeholder="请输入租户名称" />
+        <el-form-item label="分类名称" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="dataForm.name" placeholder="请输入分类名称" />
         </el-form-item>
-        <el-form-item label="租户编号" prop="code" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.code" placeholder="请输入租户编号" />
+
+        <el-form-item label="描述" prop="name" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="dataForm.descriptions" placeholder="请输入描述" />
         </el-form-item>
-        <el-form-item label="开始时间" prop="startTime" :label-width="formLabelWidth">
-          <el-date-picker
-            v-model="dataForm.startTime"
-            type="datetime"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择开始日期时间"
-          />
-        </el-form-item>
-        <el-form-item label="结束时间" prop="endTime" :label-width="formLabelWidth">
-          <el-date-picker
-            v-model="dataForm.endTime"
-            type="datetime"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择结束日期时间"
-          />
-        </el-form-item>
-        <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
-          <el-select v-model="dataForm.status" placeholder="请选择状态">
-            <el-option label="正常" value="0" />
-            <el-option label="停用" value="9" />
-          </el-select>
-        </el-form-item>
+
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button :size="size" @click="dialogVisible = false">取消</el-button>
@@ -137,6 +108,7 @@
 
 <script>
 import { fetchList, addTenant, updateTenant, deleteTenant } from '@/api/tenant'
+import { getCategory, saveCategory, updateCategory, deleteCategory } from '@/api/blog/category'
 import { parseTime } from '@/utils/index'
 
 export default {
@@ -170,11 +142,7 @@ export default {
       },
       // 表单校验
       dataRule: {
-        name: [{ required: true, message: '租户名称不能为空', trigger: 'blur' }],
-        code: [{ required: true, message: '租户编号不能为空', trigger: 'blur' }],
-        startTime: [{ required: true, message: '开始时间不能为空', trigger: 'blur' }],
-        endTime: [{ required: true, message: '结束时间不能为空', trigger: 'blur' }],
-        status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
+        name: [{ required: true, message: '分类名称不能为空', trigger: 'blur' }]
       },
       loading: false,
       dialogVisible: false,
@@ -183,11 +151,11 @@ export default {
     }
   },
   created() {
-    this.getTenantList()
+    this.getCategoryList()
   },
   methods: {
     parseTime,
-    getTenantList: function() {
+    getCategoryList: function() {
       this.loading = true
       const params = new URLSearchParams()
       params.append('current', this.currentPage)
@@ -195,7 +163,7 @@ export default {
       if (this.query.name) {
         params.append('name', this.query.name)
       }
-      fetchList(params).then(response => {
+      getCategory(params).then(response => {
         this.loading = false
         this.tableData = response.data.data.records
         this.total = response.data.data.total
@@ -203,18 +171,18 @@ export default {
     },
     // 查找
     handleFind: function() {
-      this.getTenantList()
+      this.getCategoryList()
     },
     handleReset: function() {
       this.query = {
         name: ''
       }
-      this.getTenantList()
+      this.getCategoryList()
     },
     // 换页
     handleCurrentChange: function(val) {
       this.currentPage = val
-      this.getTenantList()
+      this.getCategoryList()
     },
     // 显示新增界面
     handleAdd: function() {
@@ -230,19 +198,19 @@ export default {
 
     handleDelete: function(row) {
       const that = this
-      this.$confirm('此操作将删除租户, 是否继续?', '提示', {
+      this.$confirm('此操作将删除【' + row.name + '】分类, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          deleteTenant(row.id).then(response => {
+          deleteCategory(row.id).then(response => {
             if (response.data.code === 200) {
               this.$message({
                 type: 'success',
                 message: '操作成功'
               })
-              that.getTenantList()
+              that.getCategoryList()
             } else {
               this.$message({
                 type: 'error',
@@ -264,7 +232,7 @@ export default {
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
               this.editLoading = true
-              updateTenant(this.dataForm).then((res) => {
+              updateCategory(this.dataForm).then((res) => {
                 if (res.data.code === 200) {
                   this.$message({ message: '操作成功', type: 'success' })
                 } else {
@@ -273,7 +241,7 @@ export default {
                 this.editLoading = false
                 this.$refs['dataForm'].resetFields()
                 this.dialogVisible = false
-                this.getTenantList()
+                this.getCategoryList()
               })
             })
           }
@@ -283,7 +251,7 @@ export default {
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
               console.log(this.dataForm)
-              addTenant(this.dataForm).then((res) => {
+              saveCategory(this.dataForm).then((res) => {
                 this.editLoading = true
                 if (res.data.code === 200) {
                   this.$message({ message: '操作成功', type: 'success' })
@@ -293,7 +261,7 @@ export default {
                 this.editLoading = false
                 this.$refs['dataForm'].resetFields()
                 this.dialogVisible = false
-                this.getTenantList()
+                this.getCategoryList()
               })
             })
           }

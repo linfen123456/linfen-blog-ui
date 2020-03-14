@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 .DS_Store
 node_modules/
 dist/
@@ -20,7 +20,6 @@ selenium-debug.log
 *.sln
 
 package-lock.json
-=======
 # Logs
 logs
 *.log
@@ -101,4 +100,3 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
->>>>>>> 15695e14903f826ad35b5d6c91c49981d51b3a42

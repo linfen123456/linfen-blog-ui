@@ -165,7 +165,7 @@ export default {
     dataList: function() {
       this.loading = true
       const params = new URLSearchParams()
-      params.append('tableSchema', 'pre')
+      params.append('tableSchema', 'linfen_blog')
       getTableList(params).then(response => {
         console.log(response.data.data)
         this.loading = false

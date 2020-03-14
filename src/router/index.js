@@ -4,18 +4,22 @@ import Router from 'vue-router'
 Vue.use(Router)
 /* Layout */
 import Layout from '@/views/layout/Layout'
+import IndexLayout from '@/views/index/layout/IndexLayout'
 
 // 公共路由
 export const constantRoutes = [
   {
-    path: '',
+    path: '/',
+    component: IndexLayout,
     redirect: '/index',
-    component: Layout
-  },
-  {
-    path: '/index',
-    component: () => import('@/views/index/index'),
-    hidden: true
+    children: [
+      {
+        path: '/index',
+        component: () => import('@/views/index/index'),
+        name: 'index',
+        meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
+      }
+    ]
   },
   {
     path: '/redirect',

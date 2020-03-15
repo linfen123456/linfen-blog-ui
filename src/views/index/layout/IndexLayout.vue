@@ -1,17 +1,14 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <el-container>
-      <el-header>
-        <!--<router-link to="/admin">Go to Foo</router-link>
-        <router-link to="/login">Go to Bar</router-link>-->
-        <div style="float: left;line-height: 40px;text-align: center"><h1>淋汾博客</h1></div>
-        <sidebar style="float: right; overflow: visible; margin-right: 50px" />
+      <el-header style="border-bottom: #dddddd 1px solid">
+        <Header/>
       </el-header>
-      <el-main >
+      <el-main>
         <app-main />
       </el-main>
       <el-footer>
-        这是底部
+        <Footer></Footer>
       </el-footer>
     </el-container>
   </div>
@@ -22,6 +19,8 @@ import RightPanel from '@/components/RightPanel'
 import { Navbar, Sidebar, AppMain, TagsView, Settings } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
+import Footer from './Footer'
+import Header from './Header'
 
 export default {
   name: 'IndexLayout',
@@ -31,9 +30,16 @@ export default {
     RightPanel,
     Settings,
     Sidebar,
-    TagsView
+    TagsView,
+    Footer,
+    Header
   },
   mixins: [ResizeMixin],
+  data() {
+    return{
+
+    }
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar

@@ -60,10 +60,10 @@ export const constantRoutes = [
   {
     path: '/admin',
     component: Layout,
-    redirect: '/admin',
+    redirect: '/dashboard',
     children: [
       {
-        path: '/admin',
+        path: '/dashboard',
         component: () => import('@/views/index/home'),
         name: 'Dashboard',
         meta: { title: '主页', icon: 'dashboard', noCache: true, affix: true }

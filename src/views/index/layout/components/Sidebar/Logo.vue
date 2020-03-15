@@ -3,32 +3,32 @@
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 v-else class="sidebar-title">{{ title }} </h1>
+        <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{ title }} </h1>
+        <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'SidebarLogo',
-  props: {
-    collapse: {
-      type: Boolean,
-      required: true
-    }
-  },
-  data() {
-    return {
-      title: 'Pre权限管理系统',
-      logo: 'https://gitee.com/li_haodong/picture_management/raw/master/pic/WechatIMG9.png'
+  export default {
+    name: 'SidebarLogo',
+    props: {
+      collapse: {
+        type: Boolean,
+        required: true
+      }
+    },
+    data() {
+      return {
+        title: '淋汾博客',
+        logo: 'https://cdn2.jianshu.io/assets/web/nav-logo-4c7bbafe27adc892f3046e6978459bac.png'
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -41,17 +41,19 @@ export default {
   }
   .sidebar-logo-container {
     position: relative;
-    width: 100%;
-    height: 50px;
+    width: auto;
+    height: 45px;
     line-height: 50px;
-    background: #253243;
+    background: #ffffff;
     text-align: center;
     overflow: hidden;
+    border: 0px;
     & .sidebar-logo-link {
-      height: 100%;
-      width: 100%;
+      height: 32px;
+      width: auto;
       & .sidebar-logo {
-        width: 32px;
+        border: 0px;
+        width: auto;
         height: 32px;
         vertical-align: middle;
         margin-right: 12px;
@@ -59,7 +61,7 @@ export default {
       & .sidebar-title {
         display: inline-block;
         margin: 0;
-        color: #fff;
+        color: #000;
         font-weight: 600;
         line-height: 50px;
         font-size: 14px;

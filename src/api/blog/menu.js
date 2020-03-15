@@ -35,3 +35,11 @@ export function updateMenu(data) {
     data: data
   })
 }
+
+// 获取路由
+export const getIndexRouters = () => {
+  return request({
+    url: '/blog/menu/tree',
+    method: 'get'
+  })
+}

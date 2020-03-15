@@ -24,9 +24,12 @@ const permission = {
           resolve(accessedRoutes)
         })
       })
-    }
+    },
+
   }
 }
+
+
 
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap) {

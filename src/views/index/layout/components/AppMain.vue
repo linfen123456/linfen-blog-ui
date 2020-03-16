@@ -29,7 +29,8 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #f5f7f9;
+  /*#f5f7f9颜色*/
+  background-color:white ;
 }
 </style>
 

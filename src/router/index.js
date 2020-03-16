@@ -18,7 +18,38 @@ export const constantRoutes = [
         component: () => import('@/views/index/index'),
         name: 'index',
         meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
+      },
+      {
+        path: '/classify',
+        component: () => import('@/views/index/index'),
+        name: 'classify',
+        meta: { title: '分类', icon: 'blog', noCache: true, affix: true }
+      },
+      {
+        path: '/pigeonhole',
+        component: () => import('@/views/index/index'),
+        name: 'pigeonhole',
+        meta: { title: '归档', icon: 'dashboard', noCache: true, affix: true }
+      },
+      {
+        path: '/tag',
+        component: () => import('@/views/index/tag'),
+        name: 'tag',
+        meta: { title: '标签', icon: 'tag', noCache: true, affix: true }
+      },
+      {
+        path: '/about',
+        component: () => import('@/views/index/index'),
+        name: 'about',
+        meta: { title: '关于', icon: 'user', noCache: true, affix: true }
+      },
+      {
+        path: '/link',
+        component: () => import('@/views/index/index'),
+        name: 'link',
+        meta: { title: '友联', icon: 'link', noCache: true, affix: true }
       }
+
     ]
   },
   {
@@ -58,7 +89,7 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/admin',
+    path: '/personal',
     component: Layout,
     redirect: '/dashboard',
     children: [

@@ -22,7 +22,7 @@ export const deleteMenu = (id) => {
 // 查找导航菜单树
 export const getMenuTree = () => {
   return request({
-    url: '/blog/menu/tree',
+    url: '/blog/menu',
     method: 'get'
   })
 }

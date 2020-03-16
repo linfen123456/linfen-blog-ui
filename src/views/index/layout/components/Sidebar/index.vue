@@ -1,15 +1,15 @@
 <template>
   <div style="vertical-align:middle;position: relative;" :class="{'has-logo':showLogo}">
     <logo style="display: inline-block;float: left" v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar style="display: inline-block;float: left;margin-left: 20px;" wrap-class="scrollbar-wrapper">
+    <el-scrollbar style="display: inline-block;float: left;margin-left: 10px;" wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="$route.path"
-        :collapse-transition="false"
-        :unique-opened="true"
+        :collapse-transition="true"
+        :unique-opened="false"
         mode="horizontal"
-        style="border: none"
+        style="border: none;"
       >
-        <sidebar-item  style="float: left;width: 100px;text-align: center;" v-for="route in getIndexRotes(permission_routes)" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item  style="float: left;width: 60px;text-align: center;" v-for="route in getIndexRotes()" :key="route.path" :item="route" :base-path="route.path" />
 
       </el-menu>
     </el-scrollbar>
@@ -22,7 +22,7 @@ import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 import Logo from './Logo'
 import AppLink from './Link'
-
+import { constantRoutes } from '@/router'
 export default {
   components: { SidebarItem, Logo ,AppLink},
   computed: {
@@ -73,14 +73,15 @@ export default {
     }
   },
   methods:{
-    getIndexRotes(rotes){
+    getIndexRotes(){
+      const rotes= constantRoutes
       for (let i = 0; i <rotes.length; i++) {
         let rote = rotes[i]
         if (rote.path === '/') {
           return rote.children;
         }
       }
-      return [];
+      return rotes
 
     }
   }

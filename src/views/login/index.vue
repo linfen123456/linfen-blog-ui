@@ -351,7 +351,13 @@ export default {
     // 社交登录
     socialLogin() {
       const _this = this
-      _this.loginForm.token = getUrlKey('token')
+      var key = ''
+      try{
+       key= getUrlKey('token')
+      }catch (e) {
+
+      }
+      _this.loginForm.token = key
       if (this.loginForm.token != null && this.loginForm.token !== '') {
         _this.isShow = false
         this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {

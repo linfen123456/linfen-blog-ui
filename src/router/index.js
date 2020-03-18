@@ -21,13 +21,13 @@ export const constantRoutes = [
       },
       {
         path: '/classify',
-        component: () => import('@/views/index/index'),
+        component: () => import('@/views/index/classify'),
         name: 'classify',
         meta: { title: '分类', icon: 'blog', noCache: true, affix: true }
       },
       {
         path: '/pigeonhole',
-        component: () => import('@/views/index/index'),
+        component: () => import('@/views/index/pigeonhole'),
         name: 'pigeonhole',
         meta: { title: '归档', icon: 'dashboard', noCache: true, affix: true }
       },
@@ -39,13 +39,13 @@ export const constantRoutes = [
       },
       {
         path: '/about',
-        component: () => import('@/views/index/index'),
+        component: () => import('@/views/index/about'),
         name: 'about',
         meta: { title: '关于', icon: 'user', noCache: true, affix: true }
       },
       {
         path: '/link',
-        component: () => import('@/views/index/index'),
+        component: () => import('@/views/index/link'),
         name: 'link',
         meta: { title: '友联', icon: 'link', noCache: true, affix: true }
       }

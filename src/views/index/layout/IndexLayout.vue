@@ -2,16 +2,27 @@
   <div :class="classObj" class="app-wrapper">
     <el-container>
       <el-header style="border-bottom: #dddddd 1px solid">
+        <el-backtop :right="25" >
+          <div
+            style="width: 2px;height: 1500px; color:black;background: #444444;position: absolute;bottom: 45px; right: 11px"
+          >
+          </div>
+          <img width="80px" height="80px" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906644322,1554970062&fm=26&gp=0.jpg">
+
+        </el-backtop>
         <Header/>
       </el-header>
       <el-main>
+
         <app-main />
       </el-main>
       <el-footer>
         <Footer></Footer>
       </el-footer>
+
     </el-container>
   </div>
+
 </template>
 
 <script>

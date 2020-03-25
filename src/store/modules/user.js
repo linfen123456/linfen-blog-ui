@@ -1,10 +1,10 @@
 import { loginByUsername, logout, getUserInfo, loginByUserPhone } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { removeTenant } from '@/utils/tenant'
-
+import router from '@/router'
 const user = {
   state: {
-    user: '',
+    user: {},
     status: '',
     code: '',
     token: getToken(),
@@ -35,6 +35,10 @@ const user = {
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
+    },
+
+    SET_USER: (state, user) => {
+      state.user = user
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
@@ -90,6 +94,8 @@ const user = {
           commit('SET_NAME', data.name)
           // 头像
           commit('SET_AVATAR', data.avatar)
+          commit('SET_USER', data.user)
+
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -118,6 +124,7 @@ const user = {
         commit('SET_ROLES', [])
         removeToken()
         removeTenant()
+        router.push({path:'/'})
         resolve()
       })
     },

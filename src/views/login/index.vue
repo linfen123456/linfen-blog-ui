@@ -223,208 +223,207 @@
 </template>
 
 <script>
-import { formatData, getUrlKey } from '@/utils/webUtils'
-import { isvalidPhone } from '@/utils/validate'
-import { getImgCode } from '@/api/login'
-import { sendSms } from '@/api/user'
+  import { formatData, getUrlKey } from '@/utils/webUtils'
+  import { isvalidPhone } from '@/utils/validate'
+  import { getImgCode } from '@/api/login'
+  import { sendSms } from '@/api/user'
 
-export default {
-  name: 'Login',
-  data() {
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 2) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
+  export default {
+    name: 'Login',
+    data() {
+      const validatePassword = (rule, value, callback) => {
+        if (value.length < 2) {
+          callback(new Error('The password can not be less than 6 digits'))
+        } else {
+          callback()
+        }
       }
-    }
-    // 验证手机号格式
-    const validPhone = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入手机号'))
-      } else if (!isvalidPhone(value)) {
-        callback(new Error('请输入正确的11位手机号码'))
-      } else {
-        callback()
+      // 验证手机号格式
+      const validPhone = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入手机号'))
+        } else if (!isvalidPhone(value)) {
+          callback(new Error('请输入正确的11位手机号码'))
+        } else {
+          callback()
+        }
       }
-    }
-    return {
-      tenantList: [],
-      loginForm: {
-        username: 'admin',
-        password: '123456',
-        code: '',
+      return {
+        tenantList: [],
+        loginForm: {
+          username: 'admin',
+          password: '123456',
+          code: '',
+          token: '',
+          key: ''
+        },
+        src: '',
+        phoneForm: {
+          phone: '',
+          code: ''
+        },
+        loginRules: {
+          username: [{ required: true, trigger: 'blur' }],
+          password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+          code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+        },
+        phoneRules: {
+          phone: [{ required: true, trigger: 'blur', validator: validPhone }],
+          code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+
+        },
+        passwordType: 'password',
+        loading: false,
+        showDialog: false,
+        redirect: undefined,
         token: '',
-        key: ''
-      },
-      src: '',
-      phoneForm: {
-        phone: '',
-        code: ''
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-      },
-      phoneRules: {
-        phone: [{ required: true, trigger: 'blur', validator: validPhone }],
-        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-
-      },
-      passwordType: 'password',
-      loading: false,
-      showDialog: false,
-      redirect: undefined,
-      token: '',
-      isShow: true,
-      activeName: 'loginForm',
-      buttonName: '发送验证码',
-      isDisabled: false,
-      codeLoading: false,
-      time: 60,
-      socialLoading: false,
-      currentPath: '',
-      active: ''
-    }
-  },
-  created() {
-    this.refreshCaptcha()
-    this.socialLogin()
-  },
-  mounted() {
-    // 自动加载indexs方法
-
-  },
-  methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
+        isShow: true,
+        activeName: 'loginForm',
+        buttonName: '发送验证码',
+        isDisabled: false,
+        codeLoading: false,
+        time: 60,
+        socialLoading: false,
+        currentPath: '',
+        active: ''
       }
     },
-    // 用户名 密码登录
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
+    created() {
+      this.refreshCaptcha()
+      this.socialLogin()
+    },
+    mounted() {
+      // 自动加载indexs方法
+
+    },
+    methods: {
+      showPwd() {
+        if (this.passwordType === 'password') {
+          this.passwordType = ''
+        } else {
+          this.passwordType = 'password'
+        }
+      },
+      // 用户名 密码登录
+      handleLogin() {
+        this.$refs.loginForm.validate(valid => {
+          if (valid) {
+            this.loading = true
+            this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+              this.loading = false
+              this.$router.push({ path: this.redirect || '/' })
+            }).catch(() => {
+              this.loading = false
+              this.refreshCaptcha()
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+
+      // 手机号短信登录
+      phoneLogin() {
+        this.$refs.phoneForm.validate(valid => {
+          if (valid) {
+            this.loading = true
+            this.$store.dispatch('LoginByUserPhone', this.phoneForm).then(() => {
+              this.loading = false
+              this.$router.push({ path: this.redirect || '/' })
+            }).catch(() => {
+              this.loading = false
+              this.refreshCaptcha()
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      refreshCaptcha: function() {
+        getImgCode().then(res => {
+          console.log(res)
+          this.src = res.data.data.img
+          this.loginForm.key = res.data.data.key
+        })
+      },
+      // 社交登录
+      socialLogin() {
+        const _this = this
+        var key = ''
+        try{
+          key= getUrlKey('token')
+        }catch (e) {
+
+        }
+        _this.loginForm.token = key
+        if (this.loginForm.token != null && this.loginForm.token !== '') {
+          _this.isShow = false
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.loading = false
-            alert(''+this.redirect)
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.loading = false
             this.refreshCaptcha()
           })
-        } else {
-          console.log('error submit!!')
-          return false
         }
-      })
-    },
-
-    // 手机号短信登录
-    phoneLogin() {
-      this.$refs.phoneForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('LoginByUserPhone', this.phoneForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
-            this.refreshCaptcha()
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    refreshCaptcha: function() {
-      getImgCode().then(res => {
-        console.log(res)
-        this.src = res.data.data.img
-        this.loginForm.key = res.data.data.key
-      })
-    },
-    // 社交登录
-    socialLogin() {
-      const _this = this
-      var key = ''
-      try{
-       key= getUrlKey('token')
-      }catch (e) {
-
-      }
-      _this.loginForm.token = key
-      if (this.loginForm.token != null && this.loginForm.token !== '') {
-        _this.isShow = false
-        this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-          this.loading = false
-          this.$router.push({ path: this.redirect || '/' })
-        }).catch(() => {
-          this.loading = false
-          this.refreshCaptcha()
-        })
-      }
-    },
-    // 发送短信验证码
-    sendCode() {
-      if (this.phoneForm.phone !== '' && isvalidPhone(this.phoneForm.phone)) {
-        this.codeLoading = true
-        this.buttonName = '发送中'
-        const _this = this
-        sendSms(this.phoneForm.phone).then(res => {
-          if (res.data.code === 200) {
-            this.$message({
-              showClose: true,
-              message: '发送成功，验证码有效期2分钟',
-              type: 'success'
-            })
+      },
+      // 发送短信验证码
+      sendCode() {
+        if (this.phoneForm.phone !== '' && isvalidPhone(this.phoneForm.phone)) {
+          this.codeLoading = true
+          this.buttonName = '发送中'
+          const _this = this
+          sendSms(this.phoneForm.phone).then(res => {
+            if (res.data.code === 200) {
+              this.$message({
+                showClose: true,
+                message: '发送成功，验证码有效期2分钟',
+                type: 'success'
+              })
+              this.codeLoading = false
+              this.isDisabled = true
+              this.buttonName = this.time-- + '秒'
+              this.timer = window.setInterval(function() {
+                _this.buttonName = _this.time + '秒'
+                --_this.time
+                if (_this.time < 0) {
+                  _this.buttonName = '重新发送'
+                  _this.time = 60
+                  _this.isDisabled = false
+                  window.clearInterval(_this.timer)
+                }
+              }, 1000)
+            }
+          }).catch(err => {
+            this.resetForm()
             this.codeLoading = false
-            this.isDisabled = true
-            this.buttonName = this.time-- + '秒'
-            this.timer = window.setInterval(function() {
-              _this.buttonName = _this.time + '秒'
-              --_this.time
-              if (_this.time < 0) {
-                _this.buttonName = '重新发送'
-                _this.time = 60
-                _this.isDisabled = false
-                window.clearInterval(_this.timer)
-              }
-            }, 1000)
-          }
-        }).catch(err => {
-          this.resetForm()
-          this.codeLoading = false
-          console.log(err.data.message)
-        })
-      } else {
-        this.$message({
-          showClose: true,
-          message: '请输入手机号',
-          type: 'error'
+            console.log(err.data.message)
+          })
+        } else {
+          this.$message({
+            showClose: true,
+            message: '请输入手机号',
+            type: 'error'
+          })
+        }
+      },
+      handleClick(tab, event) {
+        this.$refs[tab.paneName].resetFields()
+      },
+      handleSocial(path) {
+        this.currentPath = path
+        this.socialLoading = true
+        window.location.href = 'http://localhost:8081/auth/' + path
+      },
+      gotoRegister() {
+        this.$router.push({
+          path: '/register'
         })
       }
-    },
-    handleClick(tab, event) {
-      this.$refs[tab.paneName].resetFields()
-    },
-    handleSocial(path) {
-      this.currentPath = path
-      this.socialLoading = true
-      window.location.href = 'http://localhost:8081/auth/' + path
-    },
-    gotoRegister() {
-      this.$router.push({
-        path: '/register'
-      })
     }
   }
-}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

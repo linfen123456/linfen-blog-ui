@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/index', '/classify', '/pigeonhole', '/tag', '/link', '/about']
+const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/index', '/classify', '/pigeonhole', '/tag', '/link', '/about', '/detial']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
@@ -37,11 +37,11 @@ router.beforeEach((to, from, next) => {
       } else {
         next()
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
-        if (hasPermission(store.getters.roles, to.meta.roles)) {
-          next()
-        } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
-        }
+        // if (hasPermission(store.getters.roles, to.meta.roles)) {
+        //   next()
+        // } else {
+        //   next({ path: '/401', replace: true, query: { noGoBack: true }})
+        // }
         // 可删 ↑
       }
     }

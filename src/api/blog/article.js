@@ -21,17 +21,19 @@ export const getArticle = (parms) => {
   })
 }
 
-// 根据文章id获取文章详情列表
-export const queryArticleItemList = (parms) => {
+// 获取分页所有文章列表
+export const getAllPageArticle = (parms) => {
   return request({
-    url: '/blog/article/queryArticleById',
+    url: '/blog/article/allPage',
     method: 'get',
     params: parms
   })
 }
+
+
 export const queryArticleItemByArticleName = (articleName) => {
   return request({
-    url: '/blog/article/queryArticleItemByName/' + articleName,
+    url: '/blog/article/queryArticleByName/' + articleName,
     method: 'get'
   })
 }
@@ -44,6 +46,15 @@ export const updateArticle = (data) => {
     data: data
   })
 }
+
+// 根据主键查询文章
+export const getArticleById = (id) => {
+  return request({
+    url: '/blog/article/' + id,
+    method: 'get'
+  })
+}
+
 // 根据主键删除文章
 export const deleteArticle = (id) => {
   return request({

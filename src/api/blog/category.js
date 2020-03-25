@@ -21,6 +21,15 @@ export const getCategory = (parms) => {
   })
 }
 
+// 获取分类列表
+export const getAllCategory = (parms) => {
+  return request({
+    url: '/blog/category/all',
+    method: 'get',
+    params: parms
+  })
+}
+
 // 更新分类
 export const updateCategory = (data) => {
   return request({

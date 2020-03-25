@@ -21,6 +21,15 @@ export const getTag = (parms) => {
   })
 }
 
+// 获取分类列表
+export const getAllTag = (parms) => {
+  return request({
+    url: '/blog/tag/all',
+    method: 'get',
+    params: parms
+  })
+}
+
 // 更新标签
 export const updateTag = (data) => {
   return request({

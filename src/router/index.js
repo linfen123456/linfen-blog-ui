@@ -48,6 +48,12 @@ export const constantRoutes = [
         component: () => import('@/views/index/link'),
         name: 'link',
         meta: { title: '友联', icon: 'link', noCache: true, affix: true }
+      },
+      {
+        path: '/detial',
+        component: () => import('@/views/index/detial'),
+        name: 'detial',
+        meta: { title: '详情', icon: 'detial', noCache: true, affix: true }
       }
 
     ]

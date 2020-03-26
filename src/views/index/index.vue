@@ -8,11 +8,11 @@
           <el-row class="list-main-item" >
             <el-col :span="22" :offset="1">
               <el-card class="list-card-item" :body-style="{ padding: '12px' }" shadow="hover">
-                <div @click="selectArticle(item)">
+                <div >
                 <el-row>
                   <el-col :span="24">
-                    <div class="list-main-item-cover">
-                      <img  src="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php" width="100%" height="250px">
+                    <div class="list-main-item-cover" @click="selectArticle(item)">
+                      <img  src="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php" lazy width="100%"  height="250px"/>
                       <div class="list-main-item-title" style="">{{item.title}}</div>
                     </div>
                   </el-col>
@@ -32,7 +32,7 @@
 
                 <el-row class="margin-top-12">
                   <el-col :span="24" >
-                    <div class="list-main-item-abstracts">
+                    <div class="list-main-item-abstracts" @click="selectArticle(item)">
                      <span v-if="item.abstracts" v-html="item.abstracts"></span>
                       <span v-else v-html="item.content.length>50?item.content.substring(0,50):item.content"></span>
                     </div>
@@ -156,11 +156,9 @@
         params.append('title', this.query.title)
       }
       getAllPageArticle(params).then(response => {
-        console.log(JSON.stringify(response))
         if (response.data.code === 200) {
           this.tableData = response.data.data.records
           this.total = response.data.data.total
-          console.log(JSON.stringify(this.tableData))
         } else {
           alert("数据获取失败")
         }
@@ -168,15 +166,14 @@
       })
     },
     selectArticle(item){
-      alert("111111111"+item.title)
-      this.$router.push({ path:  '/detial' })
+      this.$router.push({ path:  '/detial',query:{articleId:item.id} })
     },
     openWindows(type) {
       switch (type) {
         case 'github':
           window.open('https://github.com/linfen123456')
           break
-        case 'csdn':
+        case 'csdn':I
           window.open('https://blog.csdn.net/linfen1520')
           break
       }
@@ -242,6 +239,7 @@
   }
 
   .list-main-item-cover {
+    cursor: pointer;
     font-size: 25px;
     font-weight:bold;
     font-family: 'Adobe 黑体 Std R'
@@ -271,6 +269,7 @@
 
   /*摘要*/
   .list-main-item-abstracts {
+    cursor: pointer;
     font-size: 16px;
     color: #222222;
     line-height: 20px;

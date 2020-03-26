@@ -30,6 +30,14 @@ export const getAllPageArticle = (parms) => {
   })
 }
 
+// 获取分页所有文章列表
+export const getOneArticleById = (parms) => {
+  return request({
+    url: '/blog/article/oneArticleById',
+    method: 'get',
+    params: parms
+  })
+}
 
 export const queryArticleItemByArticleName = (articleName) => {
   return request({

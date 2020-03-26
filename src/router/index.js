@@ -53,7 +53,8 @@ export const constantRoutes = [
         path: '/detial',
         component: () => import('@/views/index/detial'),
         name: 'detial',
-        meta: { title: '详情', icon: 'detial', noCache: true, affix: true }
+        meta: { title: '详情', icon: 'detial', noCache: true, affix: true },
+        hidden: true
       }
 
     ]

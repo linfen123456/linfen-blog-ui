@@ -107,7 +107,7 @@
                             v-model="discussContent"/>
                 </div>
                 <div class="discuss-btn">
-                 <el-button type="primary" round @click="saveDiscussFrom(-2)">发布</el-button>
+                 <el-button type="primary" round @click="saveParentFrom">发布</el-button>
                  <el-button  round>取消</el-button>
                 </div>
               </div>
@@ -123,11 +123,12 @@
                       <el-row class="list-card-item-row">
                         <el-col :span="24"  >
                           <div class="float-left">
-                            <el-avatar :size="40" :src="discusse.avatar" ></el-avatar>
+                            <el-avatar :size="40" :src="discusse.type===0?discusse.avatar:'http://img5.imgtn.bdimg.com/it/u=766605975,3940494282&fm=26&gp=0.jpg'" ></el-avatar>
                           </div>
                           <div class="float-left margin-top-5" >
-                            <div class="list-discuss-item-authtor">{{discusse.nickname}}
-                              <span v-if="discusse.userId!==null&&discusse.userId===articleData.userId" class="article-type">作者</span></div>
+                            <div class="list-discuss-item-authtor">{{discusse.type===0?discusse.nickname1:discusse.nickname}}
+                              <span v-if="discusse.userId!==null&&discusse.userId===articleData.userId" class="article-type">作者</span>
+                              <span v-if="discusse.type===1" class="tag-item">匿名</span></div>
                             <div class="list-discuss-item-time"><b>{{index+1}}楼</b> &nbsp;&nbsp; {{parseTime(discusse.createTime)}}</div>
                           </div>
                         </el-col>
@@ -149,7 +150,7 @@
                                   v-model="discussChildContent"/>
                       </div>
                       <div class="discuss-btn">
-                        <el-button type="primary" round @click="saveDiscussFrom(discusse.id)">发布</el-button>
+                        <el-button type="primary" round @click="saveChildFrom(discusse.id)">发布</el-button>
                         <el-button  round @click="hideDiscussInput">取消</el-button>
                       </div>
                     </div>
@@ -161,10 +162,10 @@
                           <el-row class="list-card-item-row">
                             <el-col :span="24"  >
                               <div class="float-left">
-                                <el-avatar :size="40" :src="childern.avatar" ></el-avatar>
+                                <el-avatar :size="40" :src="childern.type===0?childern.avatar:'http://img5.imgtn.bdimg.com/it/u=766605975,3940494282&fm=26&gp=0.jpg'" ></el-avatar>
                               </div>
                               <div class="float-left margin-top-5" >
-                                <div class="list-discuss-item-authtor">{{childern.nickname}}
+                                <div class="list-discuss-item-authtor">{{childern.type===0?childern.nickname1:childern.nickname}}
                                   <span v-if="childern.userId!==null&&childern.userId===articleData.userId" class="article-type">作者</span></div>
                                 <div class="list-discuss-item-time">{{parseTime(childern.createTime)}}</div>
                               </div>
@@ -214,7 +215,7 @@
         <el-button @click="dialogUserFormVisible = false">账号登录</el-button>
         </router-link>
         <el-button @click="dialogUserFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveDiscussFrom()">确 定</el-button>
+        <el-button type="primary" @click="saveFormFrom()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -222,7 +223,7 @@
 
 <script>
   import { getOneArticleById } from '@/api/blog/article'
-  import { parseTime } from '@/utils/index'
+  import { parseTime,formatTime} from '@/utils/index'
   import { saveDiscuss } from '../../api/blog/discuss'
   import { mapGetters } from 'vuex'
 
@@ -258,6 +259,7 @@
     },
     methods:{
       parseTime,
+      formatTime,
       getArticleById() {
         if (this.articleId === -1||this.articleId===undefined) {
           this.$router.push({ path:  '/404'})
@@ -282,23 +284,59 @@
       hideDiscussInput(){
         this.discussChildContent=""
         this.discussPosition = -1
-      },
-      saveDiscussFrom(parentId) {
+      }
+      ,
+      saveParentFrom() {
 
-        if (parentId !== -1) {
-          this.discussForm.parentId=parentId
-          this.discussForm.content=this.discussChildContent
-        } else if (parentId === -1){
-          this.discussForm.content=this.discussContent
+        this.discussForm.content=this.discussContent
+        this.discussForm.type=0
+        this.discussForm.userId=this.user.userId
+        this.discussForm.articleId=this.articleId
+
+        if (this.user===null||this.user.userId===null) {
+          this.dialogUserFormVisible=true
+          return
         }
+        saveDiscuss(this.discussForm).then(response => {
+          if (response.data.code === 200) {
+            this.$message.success("评论成功")
+            this.discussPosition=-1
+            this.getArticleById();
 
-        /*if ((this.user===null||this.user.userId===null)&&parentId!==-2) {
-          this.discussForm.parentId=parentId
+            this.discussForm={ nickname:"", email:"", website:"" }
+          } else {
+            this.$message.error("评论失败")
+          }
+        })
+      }
+      ,
+      saveChildFrom(parentId) {
+
+        this.discussForm.parentId=parentId
+        this.discussForm.content=this.discussChildContent
+        this.discussForm.type=0
+        this.discussForm.userId=this.user.userId
+        this.discussForm.articleId=this.articleId
+
+        if (this.user===null||this.user.userId===null) {
           this.dialogUserFormVisible=true
           return
         }
 
-        if (parentId === -2) {
+        saveDiscuss(this.discussForm).then(response => {
+          if (response.data.code === 200) {
+            this.$message.success("评论成功")
+            this.discussPosition=-1
+            this.getArticleById();
+
+            this.discussForm={ nickname:"", email:"", website:"" }
+          } else {
+            this.$message.error("评论失败")
+          }
+        })
+
+      },
+      saveFormFrom() {
           if (this.discussForm.nickname === '') {
             this.$message.error("昵称不能为空")
             return
@@ -306,13 +344,8 @@
             this.$message.error("邮箱不能为空")
             return
           }
-        }*/
 
-        this.discussForm.type=0
-        this.discussForm.userId=this.user.userId
-        this.discussForm.articleId=this.articleId
-
-
+        this.discussForm.type=1
         console.log("数据："+this.discussForm)
           saveDiscuss(this.discussForm).then(response => {
           if (response.data.code === 200) {

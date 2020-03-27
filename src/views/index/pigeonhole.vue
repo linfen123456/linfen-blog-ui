@@ -1,61 +1,127 @@
 <template>
   <!--归档-->
     <div>
-      <el-row>
+      <el-row class="infinite-scroll infinite-scroll-css" v-infinite-scroll="handleCurrentChange">
         <el-col :span="18" :offset="3">
+          <div v-for="(item, pindex) in articleData" :key="pindex">
           <el-timeline>
-            <template v-for="item in 10">
-              <el-timeline-item timestamp="2018/4/12" placement="top">
+              <el-timeline-item
+                v-for="(article, index) in item.articles"
+                :key="index"
+                :timestamp="parseTime(article.createTime)"
+                placement="top"
+                size="large">
+
+                <span v-if="index===0" slot="dot" >
+                  <span style="position: absolute;left: -40px;top: 0px;font-weight: bold;">{{item.year}}</span>
+                  <span style="text-align: center;position:absolute;top: 1px;left: -2px; color:white ;background-color: #50d96d;border-radius: 10px;width: 15px;height: 15px"><b>{{item.month}}</b></span>
+
+                </span>
                 <el-card shadow="hover">
-                  <h4>更新 Github 模板</h4>
-                  <div class="list-main-item-abstracts">今天找到两个远古压缩包，密码不记得了，又很想看看里面的内容，于是先写了个密码表生成器。密码不记得了，又很想看看里面的内容，于是先写了个密码表生成器。密码不记得了，又很想看看里面的内容，于是先写了个密码表生成器。 程序生成的是三段式密码，组合输出生成密码表。
-                    请原谅我早已回到解放前的 C++ 编程水平）</div>
+                  <span class="list-main-item-title" @click="selectArticle(article)"><h4>{{article.title}}</h4></span>
+                  <div class="list-main-item-abstracts" @click="selectArticle(article)">
+                    <span v-if="article.abstracts" v-html="article.abstracts"></span>
+                    <span v-else v-html="article.content.length>50?article.content.substring(0,50):article.content"></span>
+                  </div>
 
                   <div>
                     <el-row class="margin-top-20">
                       <el-col :span="24" >
                         <div class="list-main-item-tag">
                           <i class="el-icon-collection-tag"></i>
-                          <el-tag type="success"  size="mini" effect="dark">标签</el-tag>
-                          <el-tag type="success"  size="mini" effect="dark">标签</el-tag>
-                          <el-tag type="success"  size="mini" effect="dark">标签</el-tag>
+                          <span v-for="tag in article.tags" style="margin: 0px 2px">
+                            <el-tag   type="success"  size="mini" effect="dark">{{tag.name?tag.name:"默认标签"}}</el-tag>
+                          </span>
+                          <el-tag v-if="article.tags.length===0"   type="success"  size="mini" effect="dark">默认标签</el-tag>
                         </div>
                         <div class="list-main-item-classify">
                           <i class="el-icon-folder"></i>
-                          <el-tag type="warning"  size="mini" effect="dark"> 默认分类</el-tag>
+                          <el-tag type="warning"  size="mini" effect="dark"> {{article.categoryName?article.categoryName:"默认分类"}}</el-tag>
                         </div>
                         <div class="list-main-item-classify">
                           <i class="el-icon-user"></i>
-                          <el-tag type="danger"  size="mini" effect="dark"> 淋汾</el-tag>
+                          <el-tag type="danger"  size="mini" effect="dark">  {{article.nickname}}</el-tag>
                         </div>
                         <div class="list-main-item-visible">
-                          <i class="el-icon-lollipop"></i> 0人围观
+                          <i class="el-icon-lollipop"></i> {{article.views}}人围观
                         </div>
                         <div class="list-main-item-dicuss">
-                          <i class="el-icon-chat-dot-round"></i> 0条评论
+                          <i class="el-icon-chat-dot-round"></i> {{article.discuss}}条评论
                         </div>
                       </el-col>
                     </el-row>
                   </div>
                 </el-card>
               </el-timeline-item>
-            </template>
+
           </el-timeline>
+
+          </div>
+          <el-divider v-if="currentPage==total">我是有底线的</el-divider>
         </el-col>
       </el-row>
+
+
     </div>
 </template>
 
 <script>
+  import { parseTime } from '@/utils/index'
+  import { getArticlePigeonhole } from '@/api/blog/article'
   export default {
     name: 'pigeonhole',
+    data() {
+      return{
+        articleData:[],//文章数据
+        currentPage: 1,
+        pageSize: 10,
+        total: 0, // 总数量
+      }
+    },
+    created() {
+      this.getArticlePigeonhole()
+    },
+    methods:{
+      parseTime,
+      getArticlePigeonhole() {
+        const params = new URLSearchParams()
+        params.append('current', this.currentPage)
+        params.append('size', this.pageSize)
+        getArticlePigeonhole(params).then(response => {
+          console.log(JSON.stringify(response))
+          if (response.data.code === 200&&response.data.data!=null) {
+            this.articleData=this.articleData.concat(response.data.data.records)
+            this.total = response.data.data.total
+          } else {
+
+          }
+        })
+      },
+    // 换页
+    handleCurrentChange: function() {
+      if (this.currentPage < this.total) {
+        this.currentPage += 1
+        this.getArticlePigeonhole()
+      } else {
+      }
+
+    },
+      selectArticle(item){
+        this.$router.push({ path:  '/detial',query:{articleId:item.id} })
+      },
+    }
   }
 </script>
 
 <style scoped>
 
+  .list-main-item-title{
+    cursor: pointer;
+  }
+
   /*摘要*/
   .list-main-item-abstracts {
+    cursor: pointer;
     margin: 18px 0px;
     font-size: 15px;
     color: #666666;
@@ -101,4 +167,34 @@
     font-size: 16px;
     font-family: 'Adobe 黑体 Std R'
   }
+
+  .infinite-scroll-css{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow-y: auto;
+  }
+
+  /**滚动条样式*/
+  .infinite-scroll::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 0px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+  }
+
+  .infinite-scroll::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(170, 255, 128, 0.69);
+
+  }
+
+  .infinite-scroll::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+
+    border-radius: 10px;
+
+    background: #f9f9f9;
+
+  }
+
 </style>

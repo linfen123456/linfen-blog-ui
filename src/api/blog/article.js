@@ -30,10 +30,28 @@ export const getAllPageArticle = (parms) => {
   })
 }
 
-// 获取分页所有文章列表
+// 通过文章ID文章
 export const getOneArticleById = (parms) => {
   return request({
     url: '/blog/article/oneArticleById',
+    method: 'get',
+    params: parms
+  })
+}
+
+// 获取归档查询文章列表
+export const getArticlePigeonhole = (parms) => {
+  return request({
+    url: '/blog/article/queryArticlePigeonhole',
+    method: 'get',
+    params: parms
+  })
+}
+
+// 获取归档查询文章列表
+export const getArticleByTagId = (parms) => {
+  return request({
+    url: '/blog/article/queryArticleById',
     method: 'get',
     params: parms
   })

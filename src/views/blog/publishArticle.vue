@@ -105,7 +105,7 @@
 </template>
 
 <script>
-  import { saveArticle, getArticle, queryArticleItemByArticleName,updateArticle,deleteArticle,getArticleById } from '@/api/blog/article'
+  import { saveArticle, getArticle,updateArticle,deleteArticle,getArticleById } from '@/api/blog/article'
   import {getCategory ,getAllCategory} from '@/api/blog/category'
   import {getTag ,getAllTag} from '@/api/blog/tag'
   import { parseTime } from '@/utils/index'

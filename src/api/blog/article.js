@@ -57,10 +57,12 @@ export const getArticleByTagId = (parms) => {
   })
 }
 
-export const queryArticleItemByArticleName = (articleName) => {
+// 获取标题查询文章列表
+export const getArticleLikeTitle = (parms) => {
   return request({
-    url: '/blog/article/queryArticleByName/' + articleName,
-    method: 'get'
+    url: '/blog/article/queryArticleByName',
+    method: 'get',
+    params: parms
   })
 }
 

@@ -116,7 +116,7 @@
 
 <script>
   import { fetchList, addTenant, updateTenant, deleteTenant } from '@/api/tenant'
-  import { saveArticle, getArticle, queryArticleItemByArticleName,updateArticle,deleteArticle } from '@/api/blog/article'
+  import { saveArticle, getArticle, updateArticle,deleteArticle } from '@/api/blog/article'
   import { parseTime } from '@/utils/index'
   import { mapGetters } from 'vuex'
 

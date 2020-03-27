@@ -191,7 +191,6 @@
         this.getArticleByTagId()
       },
       selectArticle(item){
-        alert("123")
         this.$router.push({ path:  '/detial',query:{articleId:item.id} })
       },
       rotateX(angleX){

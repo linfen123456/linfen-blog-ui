@@ -133,7 +133,8 @@
           });
           return;
         }
-        alert(this.search)
+        this.$router.push({ path:  '/search',query:{search:this.search} })
+        this.search=''
       }
     }
   }

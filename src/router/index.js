@@ -55,6 +55,13 @@ export const constantRoutes = [
         name: 'detial',
         meta: { title: '详情', icon: 'detial', noCache: true, affix: true },
         hidden: true
+      },
+      {
+        path: '/search',
+        component: () => import('@/views/index/search'),
+        name: 'search',
+        meta: { title: '搜索', icon: 'search', noCache: true, affix: true },
+        hidden: true
       }
 
     ]

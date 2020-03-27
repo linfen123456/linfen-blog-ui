@@ -287,7 +287,10 @@
       }
       ,
       saveParentFrom() {
-
+        if (this.discussContent === '') {
+          this.$message.success('评论内容不能为空')
+          return
+        }
         this.discussForm.content=this.discussContent
         this.discussForm.type=0
         this.discussForm.userId=this.user.userId
@@ -311,7 +314,10 @@
       }
       ,
       saveChildFrom(parentId) {
-
+        if (this.discussChildContent === '') {
+          this.$message.success('评论内容不能为空')
+          return
+        }
         this.discussForm.parentId=parentId
         this.discussForm.content=this.discussChildContent
         this.discussForm.type=0

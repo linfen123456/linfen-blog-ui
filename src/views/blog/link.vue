@@ -200,8 +200,9 @@ export default {
       },
       dataForm: {
         name: '',
-        code: '',
+        linkAddress: '',
         startTime: '',
+        type: '',
         endTime: '',
         status: ''
       },

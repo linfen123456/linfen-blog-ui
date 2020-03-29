@@ -116,7 +116,7 @@
           <el-input v-model="dataForm.content" placeholder="请输入内容" />
         </el-form-item>
 
-        <el-form-item label="描述" prop="descriptions" :label-width="formLabelWidth">
+        <el-form-item type="textarea"  label="描述" prop="descriptions" :label-width="formLabelWidth">
           <el-input v-model="dataForm.descriptions" placeholder="请输入描述" />
         </el-form-item>
 

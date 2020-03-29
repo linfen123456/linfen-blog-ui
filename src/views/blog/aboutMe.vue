@@ -3,19 +3,19 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container" style="margin: 10px 0 10px 0;">
       <el-input
-        v-model="query.name"
+        v-model="query.title"
         clearable
         class="filter-item"
         style="width: 200px;"
         size="small"
-        placeholder="请输入标签名称"
+        placeholder="请输入标题"
         @keyup.enter.native="handleFind"
       />
       <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFind">查询
       </el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-refresh" size="small" @click="handleReset">重置
       </el-button>
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">添加标签</el-button>
+      <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">添加关于我</el-button>
     </div>
 
     <el-table v-loading="loading" :data="tableData" border style="width: 100%">
@@ -27,9 +27,28 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="名称" width="120" align="center">
+      <el-table-column label="标题" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.title }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="内容" width="180" align="center">
+        <template slot-scope="scope">
+          <el-popover
+            placement="top"
+            title="描述"
+            width="200"
+            trigger="hover">
+            {{ scope.row.content}}
+            <span slot="reference">{{ scope.row.content==undefined||scope.row.content === ""||(scope.row.content.length < 15) ? scope.row.content :scope.row.content.substring(0,20)+'...'  }}</span>
+          </el-popover>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="类型" width="120" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.type }}</span>
         </template>
       </el-table-column>
 
@@ -61,8 +80,8 @@
 
     <!-- 新增修改界面 -->
     <el-dialog
-      :title="!dataForm.id ? '新增标签' : '修改标签'"
-      width="40%"
+      :title="!dataForm.id ? '新增关于我' : '修改关于我'"
+      width="60%"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
     >
@@ -75,8 +94,16 @@
         style="text-align:left;"
         @keyup.enter.native="submitForm()"
       >
-        <el-form-item label="标签名称" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.name" placeholder="请输入标签名称" />
+        <el-form-item label="标题" prop="title" :label-width="formLabelWidth">
+          <el-input v-model="dataForm.title" placeholder="请输入标题" />
+        </el-form-item>
+
+        <el-form-item label="内容" prop="content" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="15"  v-model="dataForm.content" placeholder="请输入内容" />
+        </el-form-item>
+
+        <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
+          <el-input v-model="dataForm.type" placeholder="请输入内容类型" />
         </el-form-item>
 
       </el-form>
@@ -90,11 +117,14 @@
 </template>
 
 <script>
-import { fetchList, addTenant, updateTenant, deleteTenant } from '@/api/tenant'
-import { getTag, saveTag, updateTag, deleteTag } from '@/api/blog/tag'
+import { getAboutMe, saveAboutMe, updateAboutMe, deleteAboutMe } from '@/api/blog/aboutMe'
 import { parseTime } from '@/utils/index'
+import TextThumbnail from '@/components/TextThumbnail'
 
 export default {
+  components:{
+    TextThumbnail
+  },
   data() {
     return {
       size: 'small',
@@ -118,13 +148,17 @@ export default {
       },
       dataForm: {
         name: '',
+        content: '',
+        type: '',
         startTime: '',
         endTime: '',
         status: ''
       },
       // 表单校验
       dataRule: {
-        name: [{ required: true, message: '标签名称不能为空', trigger: 'blur' }]
+        name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
+        type: [{ required: true, message: '类型不能为空', trigger: 'blur' }]
       },
       loading: false,
       dialogVisible: false,
@@ -133,11 +167,11 @@ export default {
     }
   },
   created() {
-    this.getTagList()
+    this.getAboutMeList()
   },
   methods: {
     parseTime,
-    getTagList: function() {
+    getAboutMeList: function() {
       this.loading = true
       const params = new URLSearchParams()
       params.append('current', this.currentPage)
@@ -145,7 +179,7 @@ export default {
       if (this.query.name) {
         params.append('name', this.query.name)
       }
-      getTag(params).then(response => {
+      getAboutMe(params).then(response => {
         this.loading = false
         this.tableData = response.data.data.records
         this.total = response.data.data.total
@@ -153,18 +187,18 @@ export default {
     },
     // 查找
     handleFind: function() {
-      this.getTagList()
+      this.getAboutMeList()
     },
     handleReset: function() {
       this.query = {
         name: ''
       }
-      this.getTagList()
+      this.getAboutMeList()
     },
     // 换页
     handleCurrentChange: function(val) {
       this.currentPage = val
-      this.getTagList()
+      this.getAboutMeList()
     },
     // 显示新增界面
     handleAdd: function() {
@@ -180,19 +214,19 @@ export default {
 
     handleDelete: function(row) {
       const that = this
-      this.$confirm('此操作将删除【' + row.name + '】标签, 是否继续?', '提示', {
+      this.$confirm('此操作将删除【' + row.name + '】关于我, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          deleteTag(row.id).then(response => {
+          deleteAboutMe(row.id).then(response => {
             if (response.data.code === 200) {
               this.$message({
                 type: 'success',
                 message: '操作成功'
               })
-              that.getTagList()
+              that.getAboutMeList()
             } else {
               this.$message({
                 type: 'error',
@@ -214,7 +248,7 @@ export default {
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
               this.editLoading = true
-              updateTag(this.dataForm).then((res) => {
+              updateAboutMe(this.dataForm).then((res) => {
                 if (res.data.code === 200) {
                   this.$message({ message: '操作成功', type: 'success' })
                 } else {
@@ -223,7 +257,7 @@ export default {
                 this.editLoading = false
                 this.$refs['dataForm'].resetFields()
                 this.dialogVisible = false
-                this.getTagList()
+                this.getAboutMeList()
               })
             })
           }
@@ -233,7 +267,7 @@ export default {
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
               console.log(this.dataForm)
-              saveTag(this.dataForm).then((res) => {
+              saveAboutMe(this.dataForm).then((res) => {
                 this.editLoading = true
                 if (res.data.code === 200) {
                   this.$message({ message: '操作成功', type: 'success' })
@@ -243,7 +277,7 @@ export default {
                 this.editLoading = false
                 this.$refs['dataForm'].resetFields()
                 this.dialogVisible = false
-                this.getTagList()
+                this.getAboutMeList()
               })
             })
           }

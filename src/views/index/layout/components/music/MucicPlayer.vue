@@ -1,52 +1,51 @@
 <template>
-      <div class="aplayer">
-        <div class="mucic-contr" v-bind:style="{position:'fixed',left:musicCtrl.left+'px',bottom:musicCtrl.bottom+'px'} "
-             v-on:mouseover="changeActive($event)"
-             v-on:mouseout="removeActive">
+  <div class="aplayer">
+    <div class="mucic-contr" v-bind:style="{position:'fixed',left:musicCtrl.left+'px',bottom:musicCtrl.bottom+'px'} "
+         v-on:mouseover="changeActive($event)"
+         v-on:mouseout="removeActive">
 
-          <div style="float: left"  v-if="muclicViewVisiable">
-            <el-form>
-              <el-form-item>
-                <el-switch
-                  v-model="floatMusic"
-                  inactive-text="悬浮"/>
-              </el-form-item>
-              <el-form-item>
-                <el-switch
-                  v-model="mini"
-                  inactive-text="mini"/>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="music-ctrl-text">
-            <<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>
-            <br><
-          </div>
-        </div>
-        <aplayer autoplay
-                 :music="musicList?musicList[0]:music"
-                 :list="musicList"
-                 listMaxHeight="116px"
-                 repeat="repeat-all"
-                 :showLrc="true"
-                 :listFolded="true"
-                 :controls="true"
-                 :mini="mini"
-                 :float="floatMusic"
-                 controls="true"
-                 v-if="muclicViewVisiable"
-        >
-<!--          <div slot="display" slot-scope="props" style="font-size: 12px;" >
-                {{props.currentMusic.title}}
-                {{props.props}}
-            <a style="float: right">mini</a>
-            <a style="float: right">悬浮</a>
-          </div>-->
-        </aplayer>
-
-
+      <div style="float: left">
+        <el-form>
+          <el-form-item>
+            <el-switch
+              v-model="floatMusic"
+              inactive-text="悬浮"/>
+          </el-form-item>
+          <el-form-item>
+            <el-switch
+              v-model="mini"
+              inactive-text="mini"/>
+          </el-form-item>
+        </el-form>
       </div>
+      <div class="music-ctrl-text">
+        <<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>
+        <br><
+      </div>
+    </div>
+    <aplayer autoplay
+             :music="musicList?musicList[0]:music"
+             :list="musicList"
+             listMaxHeight="116px"
+             repeat="repeat-all"
+             :showLrc="true"
+             :listFolded="true"
+             :controls="true"
+             :mini="mini"
+             :float="floatMusic"
+             v-if="muclicViewVisiable"
+    >
+      <!--          <div slot="display" slot-scope="props" style="font-size: 12px;" >
+                      {{props.currentMusic.title}}
+                      {{props.props}}
+                  <a style="float: right">mini</a>
+                  <a style="float: right">悬浮</a>
+                </div>-->
+    </aplayer>
+
+
+  </div>
 </template>
 
 <script>
@@ -67,12 +66,12 @@
           left:-120,
           bottom:0
         },
-      music:{
-        title: 'ドラマ「アンナチュラル」',
+        music:{
+          title: 'ドラマ「アンナチュラル」',
           artist: '米津玄師',
-        src: 'http://m10.music.126.net/20200328184558/e7ff69325e0908f95a0b5012fe8abf1b/ymusic/6eed/4ef2/d8ae/b85b958a70552f7e002e33d35075086c.mp3',
-        pic: 'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php'
-      },
+          src: 'http://m10.music.126.net/20200328184558/e7ff69325e0908f95a0b5012fe8abf1b/ymusic/6eed/4ef2/d8ae/b85b958a70552f7e002e33d35075086c.mp3',
+          pic: 'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php'
+        },
         musicList: [],
       }
     },
@@ -107,7 +106,7 @@
           }
           that.muclicViewVisiable=true
         }).catch(function (error) {
-         // that.$message.error("歌曲列表获取失败")
+          alert("获取失败"+error)
         });
       },
       // 鼠标移入

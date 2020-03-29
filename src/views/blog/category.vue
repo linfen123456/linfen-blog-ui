@@ -135,7 +135,6 @@ export default {
       },
       dataForm: {
         name: '',
-        code: '',
         startTime: '',
         endTime: '',
         status: ''

@@ -41,7 +41,7 @@
             width="200"
             trigger="hover">
             {{ scope.row.abstracts}}
-            <span slot="reference">{{ scope.row.abstracts==undefined||scope.row.abstracts === ""||(scope.row.abstracts.length < 20) ? scope.row.abstracts :scope.row.descriptions.substring(0,20)+'...'  }}</span>
+            <span slot="reference">{{ scope.row.abstracts==undefined||scope.row.abstracts === ""||(scope.row.abstracts.length < 20) ? scope.row.abstracts :scope.row.content.substring(0,20)+'...'  }}</span>
           </el-popover>
         </template>
       </el-table-column>

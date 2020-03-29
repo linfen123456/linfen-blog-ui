@@ -53,7 +53,7 @@
           <span  v-on:mouseover="changeActive($event)"
                  v-on:mouseout="removeActive">
             <span   v-if="isVisibleSearch">
-              <el-input v-model="search" clearable="true" class="search-input">
+              <el-input v-model="search" :clearable="true" class="search-input">
                 <el-button style="border: 0px"  slot="suffix" icon="el-icon-search" @click="handleSearch" circle></el-button>
               </el-input>
             </span>

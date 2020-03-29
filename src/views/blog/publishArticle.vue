@@ -7,7 +7,6 @@
           :model="dataForm"
           :rules="dataRule"
           label-width="80px"
-          :size="size"
           style="text-align:left;"
           @keyup.enter.native="submitForm()"
         >
@@ -27,6 +26,7 @@
 
           <el-form-item label="封面" prop="cover" :label-width="formLabelWidth">
             <el-input type="textarea" v-model="dataForm.cover" placeholder="请输入文章摘要" />
+<!--            <el-button type="text" @click="showCoverDrawer">选则封面</el-button>-->
           </el-form-item>
 
           <el-form-item label="分类" prop="categoryId" :label-width="formLabelWidth">
@@ -101,6 +101,21 @@
         </el-form>
       </el-col>
     </el-row>
+
+    <el-drawer
+      title="选择封面"
+      :visible.sync="dialogCoverVisible"
+      direction="rtl">
+      <div style="overflow:auto;height: 550px">
+        <ul style="list-style-type: decimal-leading-zero">
+          <li v-for="item in coverList ">
+            <el-image style="width: 300px; height: 150px;" :src="item" lazy></el-image>
+          </li>
+        </ul>
+      </div>
+
+    </el-drawer>
+
   </div>
 </template>
 
@@ -111,6 +126,7 @@
   import { parseTime } from '@/utils/index'
   import Tinymce from '@/components/Tinymce'
   import { mapGetters } from 'vuex'
+  import axios from 'axios'
 
   export default {
     name: 'publishArticle',
@@ -146,6 +162,8 @@
         category: [],
         tags: [],
         articleId:-1,
+        dialogCoverVisible:false,
+        coverList:[],
       }
     },
     created() {
@@ -188,6 +206,9 @@
         getArticleById(this.articleId).then((response)=>{
           this.dataForm=response.data.data
         })
+      },
+      selectImageCover(url) {
+        this.dataForm.cover=url
       },
       submitEditForm: function(isHalf) {
         if (isHalf === 3) {
@@ -232,8 +253,24 @@
         this.$confirm('确认取消吗？', '提示', {}).then(() => {
           this.$router.push({path:'/page/article'})
         })
+      },
+      showCoverDrawer() {
+        // for (let i = 0; i < 20; i++) {
+        //   this.getCoverList()
+        // }
+        this.dialogCoverVisible=true
+      },
+      getCoverList() {
+        const params = new URLSearchParams()
+        let that =this
+
+        this.$jsonp('https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?return=json' , {
+        }).then((res)=>{
+          alert('res:' + res)
+        })
+
+        }
       }
-    }
   }
 </script>
 

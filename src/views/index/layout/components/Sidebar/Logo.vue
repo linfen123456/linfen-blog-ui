@@ -2,18 +2,20 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 v-else class="sidebar-title">{{ title }}</h1>
+        <img v-if="logo!==undefined&&logo!=='false'" :src="logo" class="sidebar-logo">
+        <h1 v-else class="sidebar-title"><span v-html="title"></span></h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{ title }}</h1>
+        <img v-if="logo!==undefined&&logo!=='false'" :src="logo" class="sidebar-logo">
+        <h1 class="sidebar-title"><span v-html="title"></span></h1>
       </router-link>
     </transition>
   </div>
 </template>
 
 <script>
+  import { getBasicInfo } from '@/store/mutation'
+
   export default {
     name: 'SidebarLogo',
     props: {
@@ -24,9 +26,12 @@
     },
     data() {
       return {
-        title: '淋汾博客',
-        logo: false
+        title: getBasicInfo('site_name',"淋汾博客"),
+        logo: getBasicInfo('site_logo',"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1189453540,1107575607&fm=26&gp=0.jpg")
       }
+    },
+    created() {
+
     }
   }
 </script>

@@ -14,6 +14,9 @@
             </el-card>
           </div>
 
+          <div style="font-size: 12px;color: black">
+            先友后链
+          </div>
         </el-col>
       </el-row>
     </div>

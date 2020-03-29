@@ -2,18 +2,21 @@
   <div>
     <el-row type="flex" class="row-bg">
       <el-col :span="24">
-        <div class="footer-runtime">博客已萌萌哒运行{{sitetime}}(●'◡'●)ﾉ♥</div>
+        <div class="footer-runtime"><span >博客已萌萌哒运行{{sitetime}}</span>
+          <span class="footer-runtime">{{sitesmaill}}</span></div>
       </el-col>
     </el-row>
     <el-row type="flex" class="row-bg">
       <el-col :span="24">
-        <div class="footer-copyright" >©2012-2020 Linfen 沪ICP备11018329号-5</div>
+        <div class="footer-copyright" v-html="siteBeiAn"></div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+  import { BASIC_INFO, getBasicInfo } from '../../../store/mutation'
+
   export default {
     name: 'Footer',
     computed: {
@@ -25,23 +28,35 @@
     data() {
       return {
         sitetime: '',
-        timer: ""
+        sitesmaill: '(●\'◡\'●)ﾉ♥',
+        timer: "",
+        siteBeiAn:''
       }
     },
-    created() {
+    created: function() {
       //定时器：当前时间
       this.timer = setInterval(() => {
-        this.show_runtime();
-      }, 1000);
+        this.show_runtime()
+      }, 1000)
+
+  /*   var data=JSON.parse(localStorage.getItem(BASIC_INFO)).data
+
+      console.log('网站基本信息' +JSON.stringify(data))
+      console.log('网站基本信息' +data['site_name'])
+      console.log('网站基本信息' +data['site_name'].name)
+
+      alert(getBasicInfo('site_name'))*/
+      this.siteBeiAn = getBasicInfo('site_beian', '©2012-2020 Linfen')
     },
     methods:{
+      getBasicInfo,
       show_runtime(){
         // window.setTimeout('this.show_runtime()',1000);
         var that = this;
         setTimeout(function () {
           that.show_runtime();
         },1000);
-        let X=new Date("10/16/2017 5:22:00");
+        let X=new Date(this.getBasicInfo('site_runing_time',"1/12020 00:00:00"));//"10/16/2017 5:22:00"
         let Y=new Date();
         let T=(Y.getTime()-X.getTime());
         let M=24*60*60*1000;
@@ -53,6 +68,11 @@
         let C=Math.floor((b-B)*60);
         let D=Math.floor((c-C)*60);
         this.sitetime=""+A+"天"+B+"小时"+C+"分"+D+"秒"
+        if (D % 2 === 0) {
+          this.sitesmaill = "(●\'◡\'●)ﾉ♥"
+        } else {
+          this.sitesmaill = "(●\'◡\'●)ﾉ       ♥"
+        }
       },
       beforeDestroy() {
         //在vue实例销毁前，清除定时器

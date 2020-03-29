@@ -173,7 +173,7 @@
         case 'github':
           window.open('https://github.com/linfen123456')
           break
-        case 'csdn':I
+        case 'csdn':
           window.open('https://blog.csdn.net/linfen1520')
           break
       }

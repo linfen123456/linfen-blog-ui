@@ -11,6 +11,13 @@ const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', 
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
+
+  /**拉取网站基本信息**/
+  if (!store.getters.basicInfo) {
+      store.dispatch("getBasicInfo").then(res=>{
+      })
+  }
+
   if (getToken()) {
     /* has token*/
     if (to.path === '/login') {

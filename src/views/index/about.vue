@@ -5,7 +5,7 @@
         <h2>关于</h2>
         <div>
           <el-card class="card">
-                    ddd
+            这个人很懒，什么也没有留下~
           </el-card>
         </div>
 

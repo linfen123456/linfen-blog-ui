@@ -4,7 +4,7 @@
              v-on:mouseover="changeActive($event)"
              v-on:mouseout="removeActive">
 
-          <div style="float: left">
+          <div style="float: left"  v-if="muclicViewVisiable">
             <el-form>
               <el-form-item>
                 <el-switch
@@ -34,6 +34,7 @@
                  :controls="true"
                  :mini="mini"
                  :float="floatMusic"
+                 controls="true"
                  v-if="muclicViewVisiable"
         >
 <!--          <div slot="display" slot-scope="props" style="font-size: 12px;" >
@@ -106,7 +107,7 @@
           }
           that.muclicViewVisiable=true
         }).catch(function (error) {
-          alert("获取失败"+error)
+         // that.$message.error("歌曲列表获取失败")
         });
       },
       // 鼠标移入

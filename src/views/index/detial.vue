@@ -307,6 +307,7 @@
             this.getArticleById();
 
             this.discussForm={ nickname:"", email:"", website:"" }
+            this.discussContent=""
           } else {
             this.$message.error("评论失败")
           }
@@ -336,6 +337,8 @@
             this.getArticleById();
 
             this.discussForm={ nickname:"", email:"", website:"" }
+            this.discussChildContent=""
+
           } else {
             this.$message.error("评论失败")
           }
@@ -358,7 +361,8 @@
               this.$message.success("评论成功")
               this.discussPosition=-1
               this.getArticleById();
-
+            this.discussChildContent=""
+            this.discussContent=""
               this.discussForm={ nickname:"", email:"", website:"" }
           } else {
             this.$message.error("评论失败")

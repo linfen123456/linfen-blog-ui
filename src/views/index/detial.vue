@@ -123,7 +123,7 @@
                       <el-row class="list-card-item-row">
                         <el-col :span="24"  >
                           <div class="float-left">
-                            <el-avatar :size="40" :src="discusse.type===0?discusse.avatar:'http://img5.imgtn.bdimg.com/it/u=766605975,3940494282&fm=26&gp=0.jpg'" ></el-avatar>
+                            <el-avatar :size="40" :src="discusse.type===0?discusse.avatar:''" ></el-avatar>
                           </div>
                           <div class="float-left margin-top-5" >
                             <div class="list-discuss-item-authtor">{{discusse.type===0?discusse.nickname1:discusse.nickname}}
@@ -162,7 +162,7 @@
                           <el-row class="list-card-item-row">
                             <el-col :span="24"  >
                               <div class="float-left">
-                                <el-avatar :size="40" :src="childern.type===0?childern.avatar:'http://img5.imgtn.bdimg.com/it/u=766605975,3940494282&fm=26&gp=0.jpg'" ></el-avatar>
+                                <el-avatar :size="40" :src="childern.type===0?childern.avatar:''" ></el-avatar>
                               </div>
                               <div class="float-left margin-top-5" >
                                 <div class="list-discuss-item-authtor">{{childern.type===0?childern.nickname1:childern.nickname}}
@@ -204,12 +204,12 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="匿名评论" :visible.sync="dialogUserFormVisible">
-      <el-form :model="discussForm">
-        <el-form-item label="昵称" label-width="120px">
+    <el-dialog title="匿名评论" :visible.sync="dialogUserFormVisible" :before-close="handleDiscussClose">
+      <el-form :model="discussForm" :rules="rules">
+        <el-form-item label="昵称" label-width="120px" prop="nickname">
           <el-input v-model="discussForm.nickname" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="Email" label-width="120px">
+        <el-form-item label="Email" label-width="120px" prop="email">
           <el-input v-model="discussForm.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="网址" label-width="120px">
@@ -251,7 +251,13 @@
           nickname:"",
           email:"",
           website:""
-      }
+      },
+        rules: {
+          nickname: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+          email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, {
+            pattern: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/, message: '输入邮箱不合法'
+          }]
+        }
       }
     },
     created() {
@@ -320,6 +326,13 @@
         this.discussChildContent=""
         this.discussPosition = index
       },
+      handleDiscussClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
       hideDiscussInput(){
         this.discussChildContent=""
         this.discussPosition = -1
@@ -327,15 +340,14 @@
       ,
       saveParentFrom() {
         if (this.discussContent === '') {
-          this.$message.success('评论内容不能为空')
+          this.$message.error('评论内容不能为空')
           return
         }
         this.discussForm.content=this.discussContent
         this.discussForm.type=0
         this.discussForm.userId=this.user.userId
         this.discussForm.articleId=this.articleId
-
-        if (this.user===null||this.user.userId===null) {
+        if (this.user) {
           this.dialogUserFormVisible=true
           return
         }
@@ -355,7 +367,7 @@
       ,
       saveChildFrom(parentId) {
         if (this.discussChildContent === '') {
-          this.$message.success('评论内容不能为空')
+          this.$message.error('评论内容不能为空')
           return
         }
         this.discussForm.parentId=parentId
@@ -364,7 +376,7 @@
         this.discussForm.userId=this.user.userId
         this.discussForm.articleId=this.articleId
 
-        if (this.user===null||this.user.userId===null) {
+        if (this.user) {
           this.dialogUserFormVisible=true
           return
         }
@@ -403,6 +415,7 @@
             this.discussChildContent=""
             this.discussContent=""
               this.discussForm={ nickname:"", email:"", website:"" }
+              this.dialogUserFormVisible=false
           } else {
             this.$message.error("评论失败")
           }

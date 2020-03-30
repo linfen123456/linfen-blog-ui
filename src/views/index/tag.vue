@@ -26,9 +26,9 @@
     </el-row>
 
 
-    <div style="width: 60%; margin: 0px auto; ">
+    <div style="width: 60%; margin: 0px auto; " >
       <!--标签内容-->
-      <h3><i class="el-icon-collection-tag"></i>
+      <h3><i class="el-icon-collection-tag" id="tag"></i>
         <span>{{tagTitle}}</span></h3>
       <div v-for="item in articleData" class="list-main-item">
         <el-card   shadow="hover">
@@ -170,6 +170,8 @@
         this.tagTitle="标签--"+tagName
         this.tagId = tagId
         this.getArticleByTagId()
+
+
       },
       getArticleByTagId(){
         const params = new URLSearchParams()
@@ -182,6 +184,8 @@
           if (response.data.code === 200&&response.data.data!=null) {
             this.articleData=response.data.data.records
             this.total = response.data.data.total
+            var t = document.getElementById("tag").getBoundingClientRect().top-50
+            window.scrollTo(0,t);//滚动到锚点位置
           }
         })
       },

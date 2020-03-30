@@ -45,6 +45,7 @@
     "jsonlint": "1.6.3",
     "jsonp": "^0.2.1",
     "jszip": "3.1.5",
+    "katelog": "0.0.6",
     "koa2-cors": "^2.0.6",
     "lodash": "latest",
     "mockjs": "1.0.1-beta3",

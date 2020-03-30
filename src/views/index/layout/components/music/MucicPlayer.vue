@@ -24,10 +24,10 @@
         <br><
       </div>
     </div>
-    <aplayer autoplay
+    <aplayer
              :music="musicList?musicList[0]:music"
              :list="musicList"
-             listMaxHeight="116px"
+             listMaxHeight="156px"
              repeat="repeat-all"
              :showLrc="true"
              :listFolded="true"
@@ -43,7 +43,6 @@
                   <a style="float: right">悬浮</a>
                 </div>-->
     </aplayer>
-
 
   </div>
 </template>

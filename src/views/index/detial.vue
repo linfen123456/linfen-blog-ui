@@ -46,7 +46,7 @@
               <el-row class="margin-top-12">
                 <el-col :span="24" >
                   <div class="list-main-item-context" >
-                    <span v-html="articleData.content"></span>
+                    <div id="articleContent" ></div>
                   </div>
                 </el-col>
               </el-row>
@@ -192,9 +192,15 @@
 
       <!--侧边菜单-->
       <el-col :span="4" :offset="1" >
-        <di>
-          目录
-        </di>
+        <div class="catelog-list">
+        <el-card>
+            <div>
+              <h5>目录</h5>
+            </div>
+            <!-- 目录容器 -->
+            <div  id="articleCategory"></div>
+        </el-card>
+        </div>
       </el-col>
     </el-row>
 
@@ -226,6 +232,8 @@
   import { parseTime,formatTime} from '@/utils/index'
   import { saveDiscuss } from '../../api/blog/discuss'
   import { mapGetters } from 'vuex'
+  import Catalog from '../../components/ProgressCatalog'
+  import '../../components/ProgressCatalog/progress-catalog.css'
 
   export default {
     name: 'detial',
@@ -257,9 +265,19 @@
         'user'
       ])
     },
+    mounted() {
+
+    },
     methods:{
       parseTime,
       formatTime,
+      createCategory() {//生成文章目录
+        new Catalog({
+          contentEl: 'kCatelog',
+          catalogEl: `catelogList`,
+
+        })
+      },
       getArticleById() {
         if (this.articleId === -1||this.articleId===undefined) {
           this.$router.push({ path:  '/404'})
@@ -268,10 +286,31 @@
         const params = new URLSearchParams()
         params.append('id', this.articleId)
 
+
         getOneArticleById(params).then(response => {
           console.log(JSON.stringify(response))
           if (response.data.code === 200&&response.data.data!=null) {
             this.articleData = response.data.data
+            //使用Dom进行节点赋值
+           var content= document.getElementById('articleContent')
+            content.innerHTML=this.articleData.content;
+            new Catalog({
+              contentEl: 'articleContent',
+              catalogEl: "articleCategory",
+              selector: ['h2', 'h3'],
+              cool:false
+            })
+            /*new katelog({
+              contentEl: 'articleContent',
+              catelogEl: 'articleCategory',
+              linkClass: 'linkClass1',
+              linkActiveClass: 'linkActiveClass1',
+              supplyTop: 20,
+              selector: ['h2', 'h3'],
+              active: function (el) {
+                console.log(el);
+              }
+            });*/
           } else {
             this.$router.push({ path:  '/404'})
           }
@@ -563,4 +602,25 @@
     margin-top: 45px;
     margin-left: 45px;
   }
+
+  . linkClass1{
+    line-height: 95px;
+    font-family: "Adobe 黑体 Std R";
+    background-color: #2C7BFB;
+
+  }
+  .linkActiveClass1{
+    line-height: 95px;
+    font-family: "Adobe 黑体 Std R";
+    background-color: #2C7BFB;
+  }
+
+  .catelog-list{
+    position: fixed;
+    right: 20px;
+    top: 80px;
+    width: 25%;
+  }
+
+
 </style>

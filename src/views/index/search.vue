@@ -16,7 +16,7 @@
 
       <!--首页文章列表-->
       <el-col :span="15" :offset="2" v-loading="isLoading">
-        <template v-for="item in tableData" >
+        <div v-for="(item,index) in tableData" :key="index">
           <el-row class="list-main-item" >
             <el-col :span="22" :offset="1">
               <el-card class="list-card-item" :body-style="{ padding: '12px' }" shadow="hover">
@@ -24,7 +24,7 @@
                 <el-row>
                   <el-col :span="24">
                     <div class="list-main-item-cover" @click="selectArticle(item)">
-                      <img  src="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php" lazy width="100%"  height="250px"/>
+                      <img  :src="'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?test='+index" lazy width="100%"  height="250px"/>
                       <div class="list-main-item-title" style="">{{item.title}}</div>
                     </div>
                   </el-col>
@@ -78,7 +78,7 @@
             </el-col>
           </el-row>
 
-        </template>
+        </div>
 
         <div v-if="tableData.length===0">
           <div class="empty-css">

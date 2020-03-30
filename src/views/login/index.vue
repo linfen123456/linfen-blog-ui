@@ -8,7 +8,7 @@
     <div class="login-right">
       <div class="title-container">
         <h3 class="title">
-          PRE 权限后台系统登录
+          {{siteName}}登录
         </h3>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -215,6 +215,7 @@
         <div class="register">
           <span class="" @click="gotoRegister()">注册账户</span>
         </div>
+        <div class="get-to-index" @click="gettoIndex">返回首页</div>
       </div>
 
     </div>
@@ -227,6 +228,7 @@
   import { isvalidPhone } from '@/utils/validate'
   import { getImgCode } from '@/api/login'
   import { sendSms } from '@/api/user'
+  import { getBasicInfo } from '../../store/mutation'
 
   export default {
     name: 'Login',
@@ -251,8 +253,8 @@
       return {
         tenantList: [],
         loginForm: {
-          username: 'admin',
-          password: '123456',
+          username: '',
+          password: '',
           code: '',
           token: '',
           key: ''
@@ -285,12 +287,15 @@
         time: 60,
         socialLoading: false,
         currentPath: '',
-        active: ''
+        active: '',
+        siteName: '',
+
       }
     },
     created() {
       this.refreshCaptcha()
       this.socialLogin()
+      this.siteName=getBasicInfo('site_name','淋汾博客')
     },
     mounted() {
       // 自动加载indexs方法
@@ -421,6 +426,11 @@
         this.$router.push({
           path: '/register'
         })
+      },
+      gettoIndex() {
+        this.$router.push({
+          path: '/'
+        })
       }
     }
   }
@@ -500,6 +510,13 @@
           font-weight: 400;
           border: none;
         }
+      }
+
+      .get-to-index{
+        cursor: pointer;
+        color: #666666;
+        margin-top: 35px;
+        font-size: 14px;
       }
     }
 

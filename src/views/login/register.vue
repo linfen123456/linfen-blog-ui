@@ -4,8 +4,8 @@
 
       <div id="register">
         <div class="header">
-          <img src="/favicon.ico">
-          <p class="title">Pre系统平台注册</p>
+          <img v-if="siteLogo!=='false'" width="45px" height="45px" :src="siteLogo">
+          <p class="title">{{siteName}}注册</p>
         </div>
         <el-form
           ref="ruleForm2"
@@ -48,7 +48,7 @@
 
 <script>
 import { registerUser, sendSms } from '@/api/user'
-
+import { getBasicInfo } from '@/store/mutation'
 export default {
   name: 'Register',
   data() {
@@ -115,7 +115,9 @@ export default {
       },
       buttonText: '发送验证码',
       isDisabled: false, // 是否禁止点击发送验证码按钮
-      flag: true
+      flag: true,
+      siteName: getBasicInfo('site_name',"淋汾博客"),
+      siteLogo: getBasicInfo('site_logo',"/favicon.ico")
     }
   },
   methods: {

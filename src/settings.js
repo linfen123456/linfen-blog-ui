@@ -39,5 +39,5 @@ module.exports = {
    * The default is only used in the production env
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
-  copyright: '©2012-2020 上海佰集信息科技有限公司 / 简书 / 沪ICP备11018329号-5 '
+  copyright: '版权信息无效'
 }

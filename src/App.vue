@@ -1,29 +1,24 @@
 <template>
 
-    <div id="app">
+  <div id="app">
 
-      <router-view />
-      <mucic-player />
-      <keep-alive>
+    <router-view />
+    <mucic-player />
+    <keep-alive />
 
-      </keep-alive>
-
-    </div>
-
+  </div>
 
 </template>
 
 <script>
-
-
 
 import MucicPlayer from '@/views/index/layout/components/music/MucicPlayer'
 
 export default {
   name: 'App',
   components: {
-    MucicPlayer,
-  },
+    MucicPlayer
+  }
 
 }
 </script>

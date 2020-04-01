@@ -2,76 +2,75 @@
   <div>
     <el-row>
 
-      <el-page-header @back="goBack" title="返回" content="搜索结果">
-      </el-page-header>
+      <el-page-header title="返回" content="搜索结果" @back="goBack" />
 
       <el-row>
         <el-col :offset="5" style="padding-top: 35px">
           <div>
-            <el-input placeholder="请输入关键字" v-model="queryTitle" @keyup.enter.native="getArticleLikeTitleList" style="width: 40%; border-radius: 30px" clearable/>
-            <el-button round @click="getArticleLikeTitleList" type="primary">搜索</el-button>
+            <el-input v-model="queryTitle" placeholder="请输入关键字" style="width: 40%; border-radius: 30px" clearable @keyup.enter.native="getArticleLikeTitleList" />
+            <el-button round type="primary" @click="getArticleLikeTitleList">搜索</el-button>
           </div>
         </el-col>
       </el-row>
 
       <!--首页文章列表-->
-      <el-col :span="15" :offset="2" v-loading="isLoading">
+      <el-col v-loading="isLoading" :span="15" :offset="2">
         <div v-for="(item,index) in tableData" :key="index">
-          <el-row class="list-main-item" >
+          <el-row class="list-main-item">
             <el-col :span="22" :offset="1">
               <el-card class="list-card-item" :body-style="{ padding: '12px' }" shadow="hover">
-                <div >
-                <el-row>
-                  <el-col :span="24">
-                    <div class="list-main-item-cover" @click="selectArticle(item)">
-                      <img  :src="'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?test='+index" lazy width="100%"  height="250px"/>
-                      <div class="list-main-item-title" style="">{{item.title}}</div>
-                    </div>
-                  </el-col>
-                </el-row>
+                <div>
+                  <el-row>
+                    <el-col :span="24">
+                      <div class="list-main-item-cover" @click="selectArticle(item)">
+                        <img :src="'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?test='+index" lazy width="100%" height="250px">
+                        <div class="list-main-item-title" style="">{{ item.title }}</div>
+                      </div>
+                    </el-col>
+                  </el-row>
 
-                <el-row class="list-card-item-row">
-                  <el-col :span="24"  >
-                    <div class="float-left">
-                      <el-avatar :size="45" :src="item.avatar" ></el-avatar>
-                    </div>
-                    <div class="float-left margin-top-5" >
-                      <div class="list-main-item-authtor"><!--<i class="el-icon-user"></i>--><b>{{item.nickname}}</b></div>
-                      <div class="list-main-item-time"><!--<i class="el-icon-date"></i>-->{{parseTime(item.createTime)}}</div>
-                    </div>
-                  </el-col>
-                </el-row>
+                  <el-row class="list-card-item-row">
+                    <el-col :span="24">
+                      <div class="float-left">
+                        <el-avatar :size="45" :src="item.avatar" />
+                      </div>
+                      <div class="float-left margin-top-5">
+                        <div class="list-main-item-authtor"><!--<i class="el-icon-user"></i>--><b>{{ item.nickname }}</b></div>
+                        <div class="list-main-item-time"><!--<i class="el-icon-date"></i>-->{{ parseTime(item.createTime) }}</div>
+                      </div>
+                    </el-col>
+                  </el-row>
 
-                <el-row class="margin-top-12">
-                  <el-col :span="24" >
-                    <div class="list-main-item-abstracts" @click="selectArticle(item)">
-                     <span v-if="item.abstracts" v-html="item.abstracts"></span>
-                      <span v-else v-html="item.content.length>50?item.content.substring(0,50):item.content"></span>
-                    </div>
-                  </el-col>
-                </el-row>
+                  <el-row class="margin-top-12">
+                    <el-col :span="24">
+                      <div class="list-main-item-abstracts" @click="selectArticle(item)">
+                        <span v-if="item.abstracts" v-html="item.abstracts" />
+                        <span v-else v-html="item.content.length>50?item.content.substring(0,50):item.content" />
+                      </div>
+                    </el-col>
+                  </el-row>
 
-                <el-row class="margin-top-20">
-                  <el-col :span="24" >
-                    <div class="list-main-item-tag">
-                      <i class="el-icon-collection-tag"></i>
-                      <span v-for="tag in item.tags" style="margin: 0px 2px">
-                        <el-tag   type="success"  size="mini" effect="dark">{{tag.name?tag.name:"默认标签"}}</el-tag>
-                      </span>
-                      <el-tag v-if="item.tags.length===0"   type="success"  size="mini" effect="dark">默认标签</el-tag>
-                    </div>
-                    <div class="list-main-item-classify">
-                      <i class="el-icon-folder"></i>
-                      <el-tag type="warning"  size="mini" effect="dark"> {{item.categoryName?item.categoryName:"默认分类"}}</el-tag>
-                    </div>
-                    <div class="list-main-item-visible">
-                      <i class="el-icon-lollipop"></i> {{item.views}}人围观
-                    </div>
-                    <div class="list-main-item-dicuss">
-                      <i class="el-icon-chat-dot-round"></i> {{item.discuss}}条评论
-                    </div>
-                  </el-col>
-                </el-row>
+                  <el-row class="margin-top-20">
+                    <el-col :span="24">
+                      <div class="list-main-item-tag">
+                        <i class="el-icon-collection-tag" />
+                        <span v-for="tag in item.tags" style="margin: 0px 2px">
+                          <el-tag type="success" size="mini" effect="dark">{{ tag.name?tag.name:"默认标签" }}</el-tag>
+                        </span>
+                        <el-tag v-if="item.tags.length===0" type="success" size="mini" effect="dark">默认标签</el-tag>
+                      </div>
+                      <div class="list-main-item-classify">
+                        <i class="el-icon-folder" />
+                        <el-tag type="warning" size="mini" effect="dark"> {{ item.categoryName?item.categoryName:"默认分类" }}</el-tag>
+                      </div>
+                      <div class="list-main-item-visible">
+                        <i class="el-icon-lollipop" /> {{ item.views }}人围观
+                      </div>
+                      <div class="list-main-item-dicuss">
+                        <i class="el-icon-chat-dot-round" /> {{ item.discuss }}条评论
+                      </div>
+                    </el-col>
+                  </el-row>
 
                 </div>
               </el-card>
@@ -82,7 +81,7 @@
 
         <div v-if="tableData.length===0">
           <div class="empty-css">
-            <i class="el-icon-hot-water"></i>哇！没有查到相关数据..
+            <i class="el-icon-hot-water" />哇！没有查到相关数据..
           </div>
         </div>
 
@@ -110,12 +109,12 @@
           <el-col :span="24">
             <div style="width: 80%">
               <el-card :body-style="{ padding: '0px'}">
-                <img class="main-right-img" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1189453540,1107575607&fm=26&gp=0.jpg" >
+                <img class="main-right-img" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1189453540,1107575607&fm=26&gp=0.jpg">
                 <div class="main-right-box">
                   <span class="main-right-box-title">你能抓到我吗？</span>
                   <div class="main-right-box-text">
-                    <span ><el-button @click="openWindows('github')" round><img width="15px" height="15px" :src="social.github" /> GitHub</el-button></span>
-                    <span ><el-button @click="openWindows('csdn')" round><img width="15px" height="15px" :src="social.csdn"/> CSDN</el-button></span>
+                    <span><el-button round @click="openWindows('github')"><img width="15px" height="15px" :src="social.github"> GitHub</el-button></span>
+                    <span><el-button round @click="openWindows('csdn')"><img width="15px" height="15px" :src="social.csdn"> CSDN</el-button></span>
                   </div>
                 </div>
               </el-card>
@@ -137,39 +136,38 @@
 </template>
 
 <script>
-  import qq from '@/assets/icon/qq.png'
-  import github from '@/assets/icon/github.png'
-  import csdn from '@/assets/icon/csdn.png'
-  import { getArticleLikeTitle } from '@/api/blog/article'
-  import { parseTime } from '@/utils/index'
+import qq from '@/assets/icon/qq.png'
+import github from '@/assets/icon/github.png'
+import csdn from '@/assets/icon/csdn.png'
+import { getArticleLikeTitle } from '@/api/blog/article'
+import { parseTime } from '@/utils/index'
 
-  export default {
+export default {
   name: 'Index',
   data() {
     return {
-      social:{
-        qq:qq,
-        csdn:csdn,
+      social: {
+        qq: qq,
+        csdn: csdn,
         github: github
       },
       currentPage: 1,
       pageSize: 10,
       total: 0, // 总数量
-      tableData:[],
-        queryTitle: '',
-      isLoading:false
+      tableData: [],
+      queryTitle: '',
+      isLoading: false
     }
   },
   created() {
-    this.queryTitle=this.$route.query.search;
+    this.queryTitle = this.$route.query.search
     this.getArticleLikeTitleList()
   },
   methods: {
     parseTime,
     getArticleLikeTitleList: function() {
-
-      if (this.queryTitle === null||this.queryTitle === '') {
-        this.$message.success("查询内容不能为空！")
+      if (this.queryTitle === null || this.queryTitle === '') {
+        this.$message.success('查询内容不能为空！')
         return
       }
 
@@ -184,17 +182,16 @@
           this.tableData = response.data.data.records
           this.total = response.data.data.total
         } else {
-          alert("数据获取失败")
+          alert('数据获取失败')
         }
         this.isLoading = false
-
       })
     },
-    selectArticle(item){
-      this.$router.push({ path:  '/detial',query:{articleId:item.id} })
+    selectArticle(item) {
+      this.$router.push({ path: '/detial', query: { articleId: item.id }})
     },
     goBack() {
-      this.$router.push({ path:  '/'})
+      this.$router.push({ path: '/' })
     },
     openWindows(type) {
       switch (type) {
@@ -210,7 +207,7 @@
     handleCurrentChange: function(val) {
       this.currentPage = val
       this.getArticleList()
-    },
+    }
   }
 }
 </script>

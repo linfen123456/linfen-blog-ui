@@ -25,8 +25,8 @@
           v-for="item in statusOption"
           :key="item.value"
           :label="item.label"
-          :value="item.value">
-        </el-option>
+          :value="item.value"
+        />
       </el-select>
       <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFind">查询
       </el-button>
@@ -56,9 +56,10 @@
             placement="top"
             title="描述"
             width="200"
-            trigger="hover">
-            {{ scope.row.descriptions}}
-            <span slot="reference">{{ scope.row.descriptions==undefined||scope.row.descriptions === ""||(scope.row.descriptions.length < 20) ? scope.row.descriptions :scope.row.descriptions.substring(0,20)+'...'  }}</span>
+            trigger="hover"
+          >
+            {{ scope.row.descriptions }}
+            <span slot="reference">{{ scope.row.descriptions==undefined||scope.row.descriptions === ""||(scope.row.descriptions.length < 20) ? scope.row.descriptions :scope.row.descriptions.substring(0,20)+'...' }}</span>
           </el-popover>
         </template>
       </el-table-column>
@@ -69,13 +70,13 @@
         </template>
       </el-table-column>
 
-       <el-table-column label="访问量" width="120" align="center">
+      <el-table-column label="访问量" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.pv }}</span>
         </template>
       </el-table-column>
 
-       <el-table-column label="类型" width="120" align="center">
+      <el-table-column label="类型" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.type }}</span>
         </template>
@@ -83,11 +84,9 @@
 
       <el-table-column label="状态" width="120" align="center">
         <template slot-scope="scope">
-          <span><el-tag  effect="dark"  :type="statusOption[scope.row.status].type">{{statusOption[scope.row.status].label}}</el-tag></span>
+          <span><el-tag effect="dark" :type="statusOption[scope.row.status].type">{{ statusOption[scope.row.status].label }}</el-tag></span>
         </template>
       </el-table-column>
-
-
 
       <el-table-column label="创建时间" width="160" align="center">
         <template slot-scope="scope">
@@ -157,8 +156,8 @@
               v-for="item in statusOption"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
-            </el-option>
+              :value="item.value"
+            />
           </el-select>
         </el-form-item>
 
@@ -210,7 +209,7 @@ export default {
       dataRule: {
         name: [{ required: true, message: '友联名称不能为空', trigger: 'blur' }],
         linkAddress: [{ required: true, message: '友联地址不能为空', trigger: 'blur' }],
-        type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+        type: [{ required: true, message: '类型不能为空', trigger: 'blur' }]
       },
       statusOption: [{
         value: 0,
@@ -268,7 +267,7 @@ export default {
       this.query = {
         name: '',
         linkAddress: '',
-        status:undefined,
+        status: undefined
 
       }
       this.getLinkList()

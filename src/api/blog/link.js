@@ -30,7 +30,6 @@ export const getAllLink = (parms) => {
   })
 }
 
-
 // 获取分类列表
 export const getorderByAllLink = (parms) => {
   return request({
@@ -39,7 +38,6 @@ export const getorderByAllLink = (parms) => {
     params: parms
   })
 }
-
 
 // 更新标签
 export const updateLink = (data) => {

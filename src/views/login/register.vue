@@ -5,7 +5,7 @@
       <div id="register">
         <div class="header">
           <img v-if="siteLogo!=='false'" width="45px" height="45px" :src="siteLogo">
-          <p class="title">{{siteName}}注册</p>
+          <p class="title">{{ siteName }}注册</p>
         </div>
         <el-form
           ref="ruleForm2"
@@ -116,8 +116,8 @@ export default {
       buttonText: '发送验证码',
       isDisabled: false, // 是否禁止点击发送验证码按钮
       flag: true,
-      siteName: getBasicInfo('site_name',"淋汾博客"),
-      siteLogo: getBasicInfo('site_logo',"/favicon.ico")
+      siteName: getBasicInfo('site_name', '淋汾博客'),
+      siteLogo: getBasicInfo('site_logo', '/favicon.ico')
     }
   },
   methods: {

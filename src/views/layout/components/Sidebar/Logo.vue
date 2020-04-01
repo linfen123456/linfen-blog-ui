@@ -3,11 +3,11 @@
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
         <img v-if="logo!==undefined&&logo!=='false'" :src="logo" class="sidebar-logo">
-        <h1 v-else class="sidebar-title"><span v-html="title"></span> </h1>
+        <h1 v-else class="sidebar-title"><span v-html="title" /> </h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <img v-if="logo!==undefined&&logo!=='false'" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title"><span v-html="title"></span> </h1>
+        <h1 class="sidebar-title"><span v-html="title" /> </h1>
       </router-link>
     </transition>
   </div>
@@ -26,8 +26,8 @@ export default {
   },
   data() {
     return {
-      title: getBasicInfo("site_name_back",'淋汾博客后台'),
-      logo: getBasicInfo("site_logo_back",'false')
+      title: getBasicInfo('site_name_back', '淋汾博客后台'),
+      logo: getBasicInfo('site_logo_back', 'false')
     }
   }
 }

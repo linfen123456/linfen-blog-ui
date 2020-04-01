@@ -1,24 +1,24 @@
 export default function(opts) {
-  let defaultOpts = {
-    linkClass: 'cl-link',                             // 所有目录项都有的类
-    linkActiveClass: 'cl-link-active',                // active的目录项
-    datasetName: 'data-cata-target',                  // 目录项DOM的attribute存放对应目录的id
-    selector: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],   // 按优先级排序
-    scrollWrapper: null,                              // 按优先级排序
-    activeHook: null,                                 // 激活时候回调
+  const defaultOpts = {
+    linkClass: 'cl-link', // 所有目录项都有的类
+    linkActiveClass: 'cl-link-active', // active的目录项
+    datasetName: 'data-cata-target', // 目录项DOM的attribute存放对应目录的id
+    selector: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], // 按优先级排序
+    scrollWrapper: null, // 按优先级排序
+    activeHook: null, // 激活时候回调
     topMargin: 0,
     bottomMargin: 0,
-    cool: true                                        // 炫酷模式开关
+    cool: true // 炫酷模式开关
   }
 
   const Opt = Object.assign({}, defaultOpts, opts)
 
-  const $content = document.getElementById(Opt.contentEl)                          // 内容获取区
-  const $scroll_wrap = Opt.scrollWrapper || $content.parentNode || document.body   // 内容元素的父元素
-  const $catalog = document.getElementById(Opt.catalogEl)                          // 目录容器
+  const $content = document.getElementById(Opt.contentEl) // 内容获取区
+  const $scroll_wrap = Opt.scrollWrapper || $content.parentNode || document.body // 内容元素的父元素
+  const $catalog = document.getElementById(Opt.catalogEl) // 目录容器
 
-  let allCatalogs = $content.querySelectorAll(Opt.selector.join())
-  let tree = getCatalogsTree(allCatalogs)
+  const allCatalogs = $content.querySelectorAll(Opt.selector.join())
+  const tree = getCatalogsTree(allCatalogs)
   try {
     $catalog.innerHTML = `<div class='cl-wrapper'>${generateHtmlTree(tree, { id: -1 })}<svg class="cl-marker" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
             <path stroke="#42B983" stroke-width="3" fill="transparent" stroke-dasharray="0, 0, 0, 1000" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.5, -0.5)" />
@@ -27,9 +27,8 @@ export default function(opts) {
     console.error('error in progress-catalog', e)
   }
 
-
   const tocPath = $catalog.querySelector('.cl-marker path')
-  let tocItems, pathLength    // 左边svg-path长度
+  let tocItems, pathLength // 左边svg-path长度
 
   // 事件注册
   window.addEventListener('resize', drawPath)
@@ -37,7 +36,7 @@ export default function(opts) {
   Opt.cool && $scroll_wrap.addEventListener('scroll', coolScrollHandler)
   Opt.cool || $scroll_wrap.addEventListener('scroll', simpleScrollHandler)
 
-  setTimeout(drawPath)          // 放在宏任务队列中，防止找不到DOM
+  setTimeout(drawPath) // 放在宏任务队列中，防止找不到DOM
 
   /**
    * 画出svg路径
@@ -60,17 +59,16 @@ export default function(opts) {
     let pathIndent
 
     tocItems.forEach(function(item, idx) {
-      const { offsetLeft, offsetTop, offsetHeight } = item.anchor,
-        x = Opt.cool ? offsetLeft - 5 : offsetLeft,
-        y = offsetTop,
-        height = offsetHeight
+      const { offsetLeft, offsetTop, offsetHeight } = item.anchor
+      const x = Opt.cool ? offsetLeft - 5 : offsetLeft
+      const y = offsetTop
+      const height = offsetHeight
 
       if (idx === 0) {
         path.push('M', x, y, 'L', x, y + height)
         item.pathStart = 0
-      }
-      else {
-        if (pathIndent !== x) path.push('L', pathIndent, y)     // 缩进级别发生变化
+      } else {
+        if (pathIndent !== x) path.push('L', pathIndent, y) // 缩进级别发生变化
         path.push('L', x, y)
         tocPath.setAttribute('d', path.join(' '))
         item.pathStart = tocPath.getTotalLength() || 0
@@ -89,12 +87,12 @@ export default function(opts) {
    */
   function coolScrollHandler() {
     const wrapHeight = $scroll_wrap.clientHeight
-    let pathStart = pathLength,
-      pathEnd = 0,
-      visibleItems = 0
+    let pathStart = pathLength
+    let pathEnd = 0
+    let visibleItems = 0
     tocItems.forEach(function(liItem) {
-      const { bottom, top } = liItem.target.getBoundingClientRect(),
-        firstChild = liItem.listItem.firstChild
+      const { bottom, top } = liItem.target.getBoundingClientRect()
+      const firstChild = liItem.listItem.firstChild
       if (bottom > Opt.topMargin && top < wrapHeight - Opt.bottomMargin) {
         pathStart = Math.min(liItem.pathStart, pathStart)
         pathEnd = Math.max(liItem.pathEnd, pathEnd)
@@ -110,8 +108,7 @@ export default function(opts) {
       tocPath.setAttribute('stroke-dashoffset', '1')
       tocPath.setAttribute('stroke-dasharray', `1, ${pathStart}, ${pathEnd - pathStart}, ${pathLength}`)
       tocPath.setAttribute('opacity', '1')
-    }
-    else {
+    } else {
       tocPath.setAttribute('opacity', '0')
     }
   }
@@ -128,7 +125,7 @@ export default function(opts) {
       }
     }
     if (scrollToEl) setActiveItem(scrollToEl.id)
-    else setActiveItem(null)            // 无匹配的元素
+    else setActiveItem(null) // 无匹配的元素
   }
 
   /**
@@ -138,7 +135,7 @@ export default function(opts) {
     const datasetId = target.getAttribute(Opt.datasetName)
     target.classList.contains(Opt.linkClass) &&
     document.getElementById(datasetId)
-      .scrollIntoView({ behavior: "smooth", block: "start" })
+      .scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   /**
@@ -146,7 +143,7 @@ export default function(opts) {
    * @param catalogs
    */
   function getCatalogsTree(catalogs) {
-    let title, tagName, tree = [], treeItem = {}, parentItem = { id: -1 }, lastTreeItem = null, id
+    let title; let tagName; const tree = []; let treeItem = {}; const parentItem = { id: -1 }; let lastTreeItem = null; let id
 
     for (let i = 0; i < catalogs.length; i++) {
       title = catalogs[i].innerText || catalogs[i].textContent
@@ -203,13 +200,13 @@ export default function(opts) {
    * @return {string}
    */
   function generateHtmlTree(tree, _parent) {
-    let ul, hasChild = false
+    let ul; let hasChild = false
     if (tree) {
       ul = `<ul>`
       for (let i = 0; i < tree.length; i++) {
         if (isEqual(tree[i].parent, _parent)) {
           hasChild = true
-          ul += `<li><div class='${ Opt.linkClass } cl-level-${ tree[i].level }' ${Opt.datasetName}='${ tree[i].id }'>${tree[i].name}</div>`
+          ul += `<li><div class='${Opt.linkClass} cl-level-${tree[i].level}' ${Opt.datasetName}='${tree[i].id}'>${tree[i].name}</div>`
           ul += generateHtmlTree(tree, tree[i])
           ul += '</li>'
         }
@@ -230,13 +227,13 @@ export default function(opts) {
    *  设置选中的项
    */
   function setActiveItem(id) {
-    let catas = [...$catalog.querySelectorAll(`[${Opt.datasetName}]`)]
+    const catas = [...$catalog.querySelectorAll(`[${Opt.datasetName}]`)]
 
     catas.forEach(T => {
       if (T.getAttribute(Opt.datasetName) === id) {
         typeof Opt.activeHook === 'function' &&
         !T.classList.contains(Opt.linkActiveClass) &&
-        Opt.activeHook.call(this, T)                    // 执行active钩子
+        Opt.activeHook.call(this, T) // 执行active钩子
         T.classList.add(Opt.linkActiveClass)
       } else {
         T.classList.remove(Opt.linkActiveClass)

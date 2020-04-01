@@ -39,9 +39,10 @@
             placement="top"
             title="描述"
             width="200"
-            trigger="hover">
-            {{ scope.row.content}}
-            <span slot="reference">{{ scope.row.content==undefined||scope.row.content === ""||(scope.row.content.length < 15) ? scope.row.content :scope.row.content.substring(0,20)+'...'  }}</span>
+            trigger="hover"
+          >
+            {{ scope.row.content }}
+            <span slot="reference">{{ scope.row.content==undefined||scope.row.content === ""||(scope.row.content.length < 15) ? scope.row.content :scope.row.content.substring(0,20)+'...' }}</span>
           </el-popover>
         </template>
       </el-table-column>
@@ -99,7 +100,7 @@
         </el-form-item>
 
         <el-form-item label="内容" prop="content" :label-width="formLabelWidth">
-          <el-input type="textarea" :rows="15"  v-model="dataForm.content" placeholder="请输入内容" />
+          <el-input v-model="dataForm.content" type="textarea" :rows="15" placeholder="请输入内容" />
         </el-form-item>
 
         <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
@@ -122,7 +123,7 @@ import { parseTime } from '@/utils/index'
 import TextThumbnail from '@/components/TextThumbnail'
 
 export default {
-  components:{
+  components: {
     TextThumbnail
   },
   data() {

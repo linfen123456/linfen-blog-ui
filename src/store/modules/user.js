@@ -124,7 +124,7 @@ const user = {
         commit('SET_ROLES', [])
         removeToken()
         removeTenant()
-        router.push({path:'/'})
+        router.push({ path: '/' })
         resolve()
       })
     },

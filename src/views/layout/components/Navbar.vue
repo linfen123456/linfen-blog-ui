@@ -16,8 +16,8 @@
       <!--个人-->
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-<!--          <img :src="avatar" class="user-avatar">-->
-          <el-avatar :size="40" :src="avatar"></el-avatar>
+          <!--          <img :src="avatar" class="user-avatar">-->
+          <el-avatar :size="40" :src="avatar" />
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">

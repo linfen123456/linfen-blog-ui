@@ -3,7 +3,7 @@ import { BASIC_INFO } from '../mutation'
 
 const basicInfo = {
   state: {
-    basicInfo: [],
+    basicInfo: []
   },
   mutations: {
     SET_BASIC_INFO: (state, data) => {
@@ -15,14 +15,13 @@ const basicInfo = {
     getBasicInfo({ commit }) {
       return new Promise(resolve => {
         // 向后端请求路由数据
-        getBasicInfoKeyValueList("").then(res => {
+        getBasicInfoKeyValueList('').then(res => {
           commit('SET_BASIC_INFO', res.data)
-          localStorage.setItem(BASIC_INFO,JSON.stringify(res.data))
+          localStorage.setItem(BASIC_INFO, JSON.stringify(res.data))
           resolve(res.data)
         })
       })
-    },
-
+    }
 
   }
 }

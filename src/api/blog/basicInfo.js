@@ -39,7 +39,6 @@ export const getAllBasicInfo = (parms) => {
   })
 }
 
-
 // 获取分类列表
 export const getorderByAllBasicInfo = (parms) => {
   return request({
@@ -48,7 +47,6 @@ export const getorderByAllBasicInfo = (parms) => {
     params: parms
   })
 }
-
 
 // 更新基本信息
 export const updateBasicInfo = (data) => {

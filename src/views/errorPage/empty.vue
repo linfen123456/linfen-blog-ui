@@ -6,15 +6,15 @@
 </template>
 
 <script>
-  import empty from '@/assets/empty/empty.svg'
-  export default {
-    name: 'empty',
-    data() {
-      return{
-        empty: empty
-      }
+import empty from '@/assets/empty/empty.svg'
+export default {
+  name: 'Empty',
+  data() {
+    return {
+      empty: empty
     }
   }
+}
 </script>
 
 <style scoped>

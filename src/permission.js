@@ -8,16 +8,15 @@ import { BASIC_INFO } from './store/mutation'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1',  '/',  '/index','/classify', '/pigeonhole', '/tag', '/link', '/about', '/detial',"/search"]//
+const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/', '/index', '/classify', '/pigeonhole', '/tag', '/link', '/about', '/detial', '/search']//
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
 
-
-  /**拉取网站基本信息**/
+  /** 拉取网站基本信息**/
   if (!localStorage.getItem(BASIC_INFO)) {
-      store.dispatch("getBasicInfo").then(res=>{
-      })
+    store.dispatch('getBasicInfo').then(res => {
+    })
   }
 
   if (getToken()) {
@@ -31,14 +30,13 @@ router.beforeEach((to, from, next) => {
         store.dispatch('GetUserInfo').then(res => {
           // 拉取user_info
           const roles = res.data.roles
-          //拉取网站基本信息
-          store.dispatch("getBasicInfo").then(res=>{ })
+          // 拉取网站基本信息
+          store.dispatch('getBasicInfo').then(res => { })
           store.dispatch('GenerateRoutes').then(accessRoutes => {
             // 根据roles权限生成可访问的路由表
             router.addRoutes(accessRoutes) // 动态添加可访问路由表
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
-
         })
           .catch(err => {
             store.dispatch('FedLogOut').then(() => {

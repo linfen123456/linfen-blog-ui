@@ -39,9 +39,10 @@
             placement="top"
             title="描述"
             width="200"
-            trigger="hover">
-            {{ scope.row.descriptions}}
-            <span slot="reference">{{ scope.row.descriptions === ""||(scope.row.descriptions.length < 20) ? scope.row.descriptions :scope.row.descriptions.substring(0,20)+'...'  }}</span>
+            trigger="hover"
+          >
+            {{ scope.row.descriptions }}
+            <span slot="reference">{{ scope.row.descriptions === ""||(scope.row.descriptions.length < 20) ? scope.row.descriptions :scope.row.descriptions.substring(0,20)+'...' }}</span>
           </el-popover>
         </template>
       </el-table-column>
@@ -93,7 +94,7 @@
         </el-form-item>
 
         <el-form-item label="描述" prop="name" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="dataForm.descriptions" placeholder="请输入描述" />
+          <el-input v-model="dataForm.descriptions" type="textarea" placeholder="请输入描述" />
         </el-form-item>
 
       </el-form>

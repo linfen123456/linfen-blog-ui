@@ -116,7 +116,7 @@
           <el-input v-model="dataForm.content" placeholder="请输入内容" />
         </el-form-item>
 
-        <el-form-item type="textarea"  label="描述" prop="descriptions" :label-width="formLabelWidth">
+        <el-form-item type="textarea" label="描述" prop="descriptions" :label-width="formLabelWidth">
           <el-input v-model="dataForm.descriptions" placeholder="请输入描述" />
         </el-form-item>
 
@@ -168,7 +168,7 @@ export default {
       dataRule: {
         key: [{ required: true, message: 'key不能为空', trigger: 'blur' }],
         name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
+        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
       },
       loading: false,
       dialogVisible: false,
@@ -229,7 +229,7 @@ export default {
     handleDelete: function(row) {
       const that = this
       if (row.must === 1) {
-        this.$message.error("网站基本信息不能删除")
+        this.$message.error('网站基本信息不能删除')
         return
       }
 

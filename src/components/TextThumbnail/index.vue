@@ -4,9 +4,10 @@
       placement="top"
       title="摘要"
       width="200"
-      trigger="hover">
-      {{ text}}
-      <span slot="reference">{{ textData}}{{textValue()}}</span>
+      trigger="hover"
+    >
+      {{ text }}
+      <span slot="reference">{{ textData }}{{ textValue() }}</span>
     </el-popover>
   </div>
 
@@ -15,11 +16,6 @@
 <script>
 export default {
   name: 'TextThumbnail',
-  data() {
-    return {
-      textData:''
-    }
-  },
   props: {
     text: {
       type: String,
@@ -32,24 +28,28 @@ export default {
     endStr: {
       type: String,
       default: '..'
-    },
+    }
+  },
+  data() {
+    return {
+      textData: ''
+    }
   },
   computed: {
     textValue() {
-      this.textData= this.text
-      if (this.text!=null&&this.text!==undefined&& this.text.length > this.lengths) {
-        this.textData = this.text.substring(0, this.lengths)+this.endStr
+      this.textData = this.text
+      if (this.text != null && this.text !== undefined && this.text.length > this.lengths) {
+        this.textData = this.text.substring(0, this.lengths) + this.endStr
       }
 
-      return  this.textData
+      return this.textData
     }
   },
   watch: {
     text(newValue) {
-      this.textData=newValue
-
+      this.textData = newValue
     }
-  },
+  }
 }
 </script>
 

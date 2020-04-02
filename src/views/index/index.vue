@@ -3,7 +3,7 @@
     <el-row>
 
       <!--首页文章列表-->
-      <el-col :span="15" :offset="2">
+      <el-col :xs="24" :sm="22" :md="20" :lg="15" :xl="15" :offset="2">
         <div v-for="(item,index) in tableData" :key="index">
           <el-row class="list-main-item">
             <el-col :span="22" :offset="1">
@@ -40,7 +40,7 @@
                   </el-row>
 
                   <el-row class="margin-top-20">
-                    <el-col :span="24">
+                    <el-col :xs="18" :sm="18" :md="12" :lg="12" :xl="12" >
                       <div class="list-main-item-tag">
                         <i class="el-icon-collection-tag" />
                         <span v-for="tag in item.tags" style="margin: 0px 2px">
@@ -52,6 +52,9 @@
                         <i class="el-icon-folder" />
                         <el-tag type="warning" size="mini" effect="dark"> {{ item.categoryName?item.categoryName:"默认分类" }}</el-tag>
                       </div>
+                    </el-col>
+                    <el-col :xs="18" :sm="18" :md="12" :lg="12" :xl="12" >
+
                       <div class="list-main-item-visible">
                         <i class="el-icon-lollipop" /> {{ item.views }}人围观
                       </div>
@@ -86,7 +89,7 @@
       </el-col>
 
       <!--首页右边部分-->
-      <el-col :span="6" class="margin-top-46">
+      <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6"  class="margin-top-46 hidden-sm-and-down">
         <!--显示联系-->
         <el-row>
           <el-col :span="24">
@@ -124,6 +127,7 @@ import github from '@/assets/icon/github.png'
 import csdn from '@/assets/icon/csdn.png'
 import { getAllPageArticle } from '@/api/blog/article'
 import { parseTime } from '@/utils/index'
+import 'element-ui/lib/theme-chalk/display.css';
 
 export default {
   name: 'Index',

@@ -218,7 +218,7 @@ export default {
 
     handleDelete: function(row) {
       const that = this
-      this.$confirm('此操作将删除【' + row.name + '】文章, 是否继续?', '提示', {
+      this.$confirm('此操作将删除【' + row.title + '】文章, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

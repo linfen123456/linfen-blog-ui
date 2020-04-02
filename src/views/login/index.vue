@@ -235,7 +235,7 @@ export default {
   data() {
     const validatePassword = (rule, value, callback) => {
       if (value.length < 2) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码不能少于6位'))
       } else {
         callback()
       }
@@ -265,12 +265,12 @@ export default {
         code: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur' }],
+        username: [{ required: true,message: '请输入用户名',  trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
         code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       },
       phoneRules: {
-        phone: [{ required: true, trigger: 'blur', validator: validPhone }],
+        phone: [{ required: true, trigger: 'blur',message: '请输入手机号码', validator: validPhone }],
         code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 
       },

@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <!--右边文章-->
-      <el-col :span="16" :offset="1">
+      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16" :offset="1">
         <!--面包屑-->
         <el-row>
           <el-col>
@@ -192,7 +192,7 @@
       </el-col>
 
       <!--侧边菜单-->
-      <el-col :span="4" :offset="1">
+      <el-col :xs="24" :sm="24" :md="20" :lg="4" :xl="4" :offset="1" class="hidden-sm-and-down">
         <div class="catelog-list">
           <el-card>
             <div>
@@ -235,6 +235,7 @@ import { saveDiscuss } from '../../api/blog/discuss'
 import { mapGetters } from 'vuex'
 import Catalog from '../../components/ProgressCatalog'
 import '../../components/ProgressCatalog/progress-catalog.css'
+import 'element-ui/lib/theme-chalk/display.css';
 
 export default {
   name: 'Detial',

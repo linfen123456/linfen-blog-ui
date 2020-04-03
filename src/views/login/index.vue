@@ -448,7 +448,7 @@ export default {
     background-size: cover;
 
     .login-right {
-      width: 30%;
+      width: 30rem;
       padding: 50px;
       border-radius: 6px;
       background: #ffffff;

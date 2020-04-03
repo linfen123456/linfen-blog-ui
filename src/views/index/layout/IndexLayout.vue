@@ -6,7 +6,7 @@
           <div
             style="width: 2px;height: 1500px; color:black;background: #444444;position: absolute;bottom: 45px; right: 11px"
           />
-          <img width="80px" height="80px" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906644322,1554970062&fm=26&gp=0.jpg">
+          <img style="width: 80px;height: 80px" width="80px" height="80px" :src="backUp"/>
 
         </el-backtop>
         <Header />
@@ -31,6 +31,8 @@ import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 import Footer from './Footer'
 import Header from './Header'
+import backUp from '@/assets/icon/backUp.png'
+
 
 export default {
   name: 'IndexLayout',
@@ -47,7 +49,7 @@ export default {
   mixins: [ResizeMixin],
   data() {
     return {
-
+      backUp: backUp
     }
   },
   computed: {

@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
 /*
- * 标签管理模块
+ * 友联管理模块
  */
 
-// 保存标签
+// 保存友联
 export const saveLink = (data) => {
   return request({
     url: '/blog/link',
@@ -12,7 +12,7 @@ export const saveLink = (data) => {
     data: data
   })
 }
-// 获取标签列表
+// 获取友联列表
 export const getLink = (parms) => {
   return request({
     url: '/blog/link',
@@ -39,7 +39,7 @@ export const getorderByAllLink = (parms) => {
   })
 }
 
-// 更新标签
+// 更新友联
 export const updateLink = (data) => {
   return request({
     url: '/blog/link',
@@ -47,7 +47,16 @@ export const updateLink = (data) => {
     data: data
   })
 }
-// 根据主键删除标签
+
+// 更新友联
+export const updateLinkVisible = (data) => {
+  return request({
+    url: '/blog/link/updatevisible',
+    method: 'put',
+    data: data
+  })
+}
+// 根据主键删除友联
 export const deleteLink = (id) => {
   return request({
     url: '/blog/link/' + id,

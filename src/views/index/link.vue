@@ -8,7 +8,7 @@
             <el-divider content-position="left"><h3>{{ item.type }}</h3></el-divider>
             <ul class="dividers">
               <li v-for="link in item.links" style="font-size: 16px;margin: 10px 0px;">
-                <el-link type="primary" :href="link.linkAddress" :underline="false"><b>{{ link.name }}</b></el-link>--{{ link.descriptions }}<span style="margin-left: 35px">{{ link.pv }}人访问</span>
+                <span style="color: #409EFF" type="primary"  @click="openUrl(link.linkAddress,link.id)"><b>{{ link.name }}</b></span>--{{ link.descriptions }}<span style="margin-left: 35px">{{ link.pv }}人访问</span>
               </li>
             </ul>
           </el-card>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { getorderByAllLink } from '../../api/blog/link'
+  import { getorderByAllLink, updateLinkVisible } from '../../api/blog/link'
 
 export default {
   name: 'Link',
@@ -32,7 +32,10 @@ export default {
       linkList: [],
       currentPage: 1,
       pageSize: 20,
-      total: 0 // 总数量
+      total: 0 ,// 总数量
+      links:{
+        id:-0
+      }
     }
   },
   created() {
@@ -52,6 +55,15 @@ export default {
           alert('数据获取失败')
         }
       })
+    },
+    openUrl(url,id) {
+      this.links.id=id
+      updateLinkVisible(this.links).then((res) => {
+        if (res.data.code === 200) {
+       this.getLinkList()
+        }
+      })
+      window.open(url)
     }
   }
 }

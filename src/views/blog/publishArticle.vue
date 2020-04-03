@@ -24,8 +24,10 @@
           </el-form-item>
 
           <el-form-item label="封面" prop="cover" :label-width="formLabelWidth">
-            <el-input v-model="dataForm.cover" type="textarea" placeholder="请输入文章摘要" />
-            <!--            <el-button type="text" @click="showCoverDrawer">选则封面</el-button>-->
+            <el-input v-model="dataForm.cover" placeholder="请输入文章摘要" >
+              <el-button slot="append" @click="dialogCoverPreVisible=true" icon="el-icon-view"></el-button>
+            </el-input>
+                        <el-button type="text" @click="showCoverDrawer">选则封面</el-button>
           </el-form-item>
 
           <el-form-item label="分类" prop="categoryId" :label-width="formLabelWidth">
@@ -101,20 +103,28 @@
       </el-col>
     </el-row>
 
-    <el-drawer
-      title="选择封面"
-      :visible.sync="dialogCoverVisible"
-      direction="rtl"
-    >
-      <div style="overflow:auto;height: 550px">
-        <ul style="list-style-type: decimal-leading-zero">
-          <li v-for="item in coverList ">
-            <el-image style="width: 300px; height: 150px;" :src="item" lazy />
-          </li>
-        </ul>
-      </div>
 
-    </el-drawer>
+    <el-dialog width="600px" title="选择封面" :visible.sync="dialogCoverVisible">
+      <div style="width: 500px;height: 300px">
+        <el-image style="width: 500px; height: auto;max-height: 320px" :src="coverList[coverPosition].imgurl" lazy />
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="getPreImage">上一张</el-button>
+        <el-button @click="getNextImage">下一张</el-button>
+        <el-button @click="dialogCoverVisible = false">取 消</el-button>
+        <el-button type="primary" @click="selectImageCover">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog width="600px" title="封面预览" :visible.sync="dialogCoverPreVisible">
+      <div style="width: 500px;height: 300px">
+        <el-image style="width: 500px; height: auto;max-height: 320px" :src="dataForm.cover" lazy />
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogCoverPreVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+
 
   </div>
 </template>
@@ -127,6 +137,8 @@ import { parseTime } from '@/utils/index'
 import Tinymce from '@/components/Tinymce'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
+import { getToken } from '@/utils/auth'
+import { getIamge } from '../../api/blog/restTemplate'
 
 export default {
   name: 'PublishArticle',
@@ -163,7 +175,9 @@ export default {
       tags: [],
       articleId: -1,
       dialogCoverVisible: false,
-      coverList: []
+      dialogCoverPreVisible: false,
+      coverList: [{imgUrl:''}],
+      coverPosition:0
     }
   },
   created() {
@@ -205,8 +219,50 @@ export default {
         this.dataForm = response.data.data
       })
     },
-    selectImageCover(url) {
-      this.dataForm.cover = url
+    selectImageCover() {
+      this.dataForm.cover = this.coverList[this.coverPosition].imgurl
+      this.dialogCoverVisible = false
+    },
+    getPreImage() {
+      if (this.coverPosition >1) {
+        this.coverPosition--
+      } else {
+        this.$message.success("已经是第一张了")
+      }
+
+    },
+    getNextImage() {
+      if (this.coverPosition < this.coverList.length - 1) {
+        this.coverPosition++
+      } else {
+        this.getCoverImage()
+      }
+
+    },
+    getCoverImage() {
+      const params = new URLSearchParams()
+      let that=this
+      axios({
+        headers: {
+          'Authorization': 'Bearer ' + getToken()
+        },
+        method: 'get',
+        url: '/pre/restTemplate/image',
+        data: ''
+      })
+        .then(function (response) {
+          that.coverList.push(response.data)
+          that.coverPosition++
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      /*getIamge(params).then(response => {
+        console.log(response)
+        alert(JSON.stringify(response))
+        this.coverData = response
+      })*/
     },
     submitEditForm: function(isHalf) {
       if (isHalf === 3) {
@@ -252,20 +308,9 @@ export default {
         this.$router.push({ path: '/page/article' })
       })
     },
-    showCoverDrawer() {
-      // for (let i = 0; i < 20; i++) {
-      //   this.getCoverList()
-      // }
+    showCoverDrawer() {//显示封面选择框
+      this.getCoverImage()
       this.dialogCoverVisible = true
-    },
-    getCoverList() {
-      const params = new URLSearchParams()
-      const that = this
-
-      this.$jsonp('https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?return=json', {
-      }).then((res) => {
-        alert('res:' + res)
-      })
     }
   }
 }

@@ -40,7 +40,7 @@
               <el-divider />
 
               <div class="list-main-item-cover">
-                <img src="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php" width="100%" height="250px">
+                <img :src="articleData.cover?articleData.cover:'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php'" width="100%" height="250px">
               </div>
 
               <el-row class="margin-top-12">

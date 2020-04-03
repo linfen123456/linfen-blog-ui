@@ -12,7 +12,7 @@
                   <el-row>
                     <el-col :span="24">
                       <div class="list-main-item-cover" @click="selectArticle(item)">
-                        <img :src="'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?test='+index" lazy style="width:100%;  height:250px">
+                        <img :src="item.cover?item.cover:'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?test='+index" lazy style="width:100%;  height:250px">
                         <div class="list-main-item-title" style="">{{ item.title }}</div>
                       </div>
                     </el-col>

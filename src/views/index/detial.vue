@@ -347,7 +347,7 @@ export default {
       this.discussForm.type = 0
       this.discussForm.userId = this.user.userId
       this.discussForm.articleId = this.articleId
-      if (this.user) {
+      if (!this.user) {
         this.dialogUserFormVisible = true
         return
       }
@@ -375,7 +375,7 @@ export default {
       this.discussForm.userId = this.user.userId
       this.discussForm.articleId = this.articleId
 
-      if (this.user) {
+      if (!this.user) {
         this.dialogUserFormVisible = true
         return
       }

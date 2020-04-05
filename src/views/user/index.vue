@@ -8,7 +8,7 @@
           </div>
           <div class="user-profile">
             <div class="box-center">
-              <pan-thumb :image="avatar" :height="'100px'" :width="'100px'" :hoverable="false">
+              <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
                 <el-link type="primary" class="change-avatar" @click="dialogVisible = true">更换头像</el-link>
               </pan-thumb>
             </div>
@@ -53,7 +53,7 @@
                       :show-file-list="false"
                       :before-upload="beforeAvatarUpload"
                     >
-                      <img v-if="user.avatar" :src="user.avatar" class="avatar" alt="">
+                      <el-avatar v-if="user.avatar" :size="55" :src="user.avatar"/>
                       <i v-else class="el-icon-plus avatar-uploader-icon" />
                     </el-upload>
                   </el-form-item>

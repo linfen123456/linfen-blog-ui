@@ -38,7 +38,7 @@
           <el-popover
             placement="top"
             title="描述"
-            width="200"
+            width="550"
             trigger="hover"
           >
             {{ scope.row.content }}

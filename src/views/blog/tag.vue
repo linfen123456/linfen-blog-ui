@@ -62,7 +62,7 @@
     <!-- 新增修改界面 -->
     <el-dialog
       :title="!dataForm.id ? '新增标签' : '修改标签'"
-      width="40%"
+      width="30rem"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
     >

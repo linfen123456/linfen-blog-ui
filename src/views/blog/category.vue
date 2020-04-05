@@ -76,7 +76,7 @@
     <!-- 新增修改界面 -->
     <el-dialog
       :title="!dataForm.id ? '新增分类' : '修改分类'"
-      width="40%"
+      width="30rem"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
     >

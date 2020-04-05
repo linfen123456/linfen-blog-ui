@@ -107,7 +107,7 @@
     <!-- 新增修改界面 -->
     <el-dialog
       :title="!dataForm.id ? '新增文件' : '修改文件'"
-      width="40%"
+      width="40rem"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
     >
@@ -120,16 +120,21 @@
         style="text-align:left;"
         @keyup.enter.native="submitForm()"
       >
-        <el-form-item label="文件名称" prop="title" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.title" placeholder="请输入文件名称" />
-        </el-form-item>
 
-        <el-form-item label="描述" prop="descriptions" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.descriptions" placeholder="请输入文件名称" />
-        </el-form-item>
-
-        <el-form-item label="大小" prop="fileSize" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.fileSize" placeholder="请输入文件名称" />
+        <el-form-item label="上传文件" prop="title" :label-width="formLabelWidth">
+          <el-upload
+            drag
+            action="/pre/qiniu/upload"
+            :before-upload="handleUploadPreview"
+            :on-success="handleUploadSuccess"
+            :on-error="handleUploadError"
+            :limit="1"
+            :headers="uploadHeaders"
+            multiple>
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">文件不得超过25M</div>
+          </el-upload>
         </el-form-item>
 
         <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
@@ -141,10 +146,34 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="文件名称" prop="title" :label-width="formLabelWidth">
+          <el-input v-model="dataForm.title" placeholder="请输入文件名称" />
+        </el-form-item>
+
+        <el-form-item label="描述" prop="descriptions" :label-width="formLabelWidth">
+          <el-input v-model="dataForm.descriptions" placeholder="请输入文件描述" />
+        </el-form-item>
+
+
+        <el-form-item label="原文件名" prop="originName" :label-width="formLabelWidth">
+          <el-input  :disabled="true" v-model="dataForm.originName" placeholder="请输入原文件名" />
+        </el-form-item>
+
+
+        <el-form-item label="大小" prop="fileSize" :label-width="formLabelWidth">
+          <el-input  :disabled="true" v-model="dataForm.fileSize" placeholder="请输入文件大小" />
+        </el-form-item>
+
         <el-form-item label="下载地址" prop="url" :label-width="formLabelWidth">
-          <el-input v-model="dataForm.url" placeholder="请输入下载地址" />
+          <el-input :disabled="true" v-model="dataForm.url" placeholder="请输入下载地址" >
+            <el-button slot="append" v-if="dataForm.url" v-clipboard:copy="dataForm.url" v-clipboard:success="clipboardSuccess" type="primary">
+              复制
+            </el-button>
+          </el-input>
+
           <el-link v-if="isEditForm" :underline="false" type="primary" :href="dataForm.url">下载</el-link>
         </el-form-item>
+
 
 
       </el-form>
@@ -160,8 +189,14 @@
 <script>
 import { getDownload, saveDownload, updateDownload, deleteDownload } from '@/api/blog/download'
 import { parseTime } from '@/utils/index'
+import { getToken } from '@/utils/auth'
+import { getTenant } from '@/utils/tenant'
+import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 
 export default {
+  directives: {
+    clipboard
+  },
   data() {
     return {
       size: 'small',
@@ -198,15 +233,48 @@ export default {
       },
       loading: false,
       dialogVisible: false,
-      editLoading: false
-
+      editLoading: false,
+      uploadHeaders:{}
     }
   },
   created() {
     this.getDownloadList()
+    this.uploadHeaders={
+      'Authorization': 'Bearer ' + getToken(),
+    }
   },
   methods: {
     parseTime,
+  clipboardSuccess() {
+    this.$message({
+      message: '复制成功',
+      type: 'success',
+      duration: 1500
+    })
+  },
+    handleUploadPreview(file) {
+      console.log(file);
+      const isLt2M = file.size / 1024 / 1024 < 25;
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 25MB!');
+      }
+      return isLt2M;
+    },
+    handleUploadSuccess(res, file) {
+      if (res.code === 200) {
+        this.$message.success('上传成功')
+        this.dataForm.url="/pre/qiniu/file/"+res.data.fileName
+        this.dataForm.fileSize=res.data.size
+        this.dataForm.originName=res.data.originName
+        console.log(JSON.stringify(this.dataForm))
+
+      } else {
+        this.$message.success(res.msg)
+      }
+    },
+    handleUploadError(err, file) {
+    this.$message.error("失败"+err)
+    },
     getDownloadList: function() {
       this.loading = true
       const params = new URLSearchParams()
@@ -250,7 +318,7 @@ export default {
 
     handleDelete: function(row) {
       const that = this
-      this.$confirm('此操作将删除【' + row.name + '】文件, 是否继续?', '提示', {
+      this.$confirm('此操作将删除【' + row.title + '】文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

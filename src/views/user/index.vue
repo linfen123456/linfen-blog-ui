@@ -217,7 +217,7 @@ export default {
   },
   computed: {
     avatar() {
-      return require(`@/assets/avatar/c7c4ee7be3eb4e73a19887dc713505145.jpg`)
+      return require(`@/assets/avatar/avatar_1_1.jpg`)
     }
   },
   created() {

@@ -116,14 +116,14 @@
               <div class="list-card-item-main">
                 <h4>全部评论 <small>{{ articleData.discusses.length }}</small></h4>
                 <!--用户信息-->
-                <div v-for="(discusse,index ) in articleData.discusses" key="" class="list-card-item-main-div">
+                <div v-for="(discusse,index ) in articleData.discusses" key="index" class="list-card-item-main-div">
                   <el-card shadow="hover">
                     <!--一级评论-->
                     <div>
                       <el-row class="list-card-item-row">
                         <el-col :span="24">
                           <div class="float-left">
-                            <el-avatar :size="40" :src="discusse.type===0?discusse.avatar:''" />
+                            <el-avatar :size="40" :src="discusse.type===0?discusse.avatar:avatar" />
                           </div>
                           <div class="float-left margin-top-5">
                             <div class="list-discuss-item-authtor">{{ discusse.type===0?discusse.nickname1:discusse.nickname }}
@@ -164,7 +164,7 @@
                         <el-row class="list-card-item-row">
                           <el-col :span="24">
                             <div class="float-left">
-                              <el-avatar :size="40" :src="childern.type===0?childern.avatar:''" />
+                              <el-avatar :size="40" :src="childern.type===0?childern.avatar:avatar" />
                             </div>
                             <div class="float-left margin-top-5">
                               <div class="list-discuss-item-authtor">{{ childern.type===0?childern.nickname1:childern.nickname }}
@@ -271,7 +271,11 @@ export default {
       'name',
       'avatar',
       'user'
-    ])
+    ]),
+      avatar() {
+       // let name= Math.floor(Math.random() * (29 - 1)) + 1;
+        return require(`@/assets/avatar/avatar_2_28.jpg`)
+      }
   },
   mounted() {
 
@@ -347,7 +351,6 @@ export default {
       this.discussForm.type = 0
       this.discussForm.userId = this.user.userId
       this.discussForm.articleId = this.articleId
-      alert(JSON.stringify(this.user))
       if (!this.user.username) {
         this.dialogUserFormVisible = true
         return

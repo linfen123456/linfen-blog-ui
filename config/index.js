@@ -7,11 +7,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/pre': {
+      '/linfen': {
         target: 'http://localhost:8081',//后端接口地址
         changeOrigin: true,  //是否跨域
         pathRewrite: {
-          '^/pre': '/',//重写,
+          '^/linfen': '/',//重写,
         }
       }
 

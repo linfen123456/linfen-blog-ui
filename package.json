@@ -1,8 +1,8 @@
 {
-  "name": "pre-ui",
+  "name": "linfen-blog-ui",
   "version": "3.10.0",
   "description": "",
-  "author": "lihaodong <lihaodongmail@163.com>",
+  "author": "linfen",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

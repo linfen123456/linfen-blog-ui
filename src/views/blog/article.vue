@@ -27,9 +27,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="名称" width="200" align="center">
+      <el-table-column label="名称" width="200" align="left">
         <template slot-scope="scope">
-          <span>{{ scope.row.title }}</span>
+          <div><span v-if="scope.row.isView==='3'" class="article-half">草稿</span>{{ scope.row.title }}</div>
         </template>
       </el-table-column>
 
@@ -291,3 +291,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .article-half {
+    border-radius:10px;
+    padding:2px 5px;
+    border:#E65D6E 1px solid;
+    font-size: 12px;
+    color: #E65D6E;
+    margin-right: 5px;
+  }
+</style>

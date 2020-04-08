@@ -68,14 +68,14 @@
 
       <el-table-column label="链接" width="100" align="center">
         <template slot-scope="scope">
-            <el-link type="primary" :underline="false"  :href="scope.row.url">下载</el-link>
+          <el-link type="primary" :underline="false"  :href="scope.row.url">下载</el-link>
         </template>
       </el-table-column>
 
       <el-table-column label="下载量" width="100" align="center">
-          <template slot-scope="scope">
-            {{scope.row.downloads}}
-          </template>
+        <template slot-scope="scope">
+          {{scope.row.downloads}}
+        </template>
       </el-table-column>
 
       <el-table-column label="创建时间" width="160" align="center">
@@ -191,233 +191,233 @@
 </template>
 
 <script>
-import { getDownload, saveDownload, updateDownload, deleteDownload } from '@/api/blog/download'
-import { parseTime } from '@/utils/index'
-import { getToken } from '@/utils/auth'
-import { getTenant } from '@/utils/tenant'
-import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
+  import { getDownload, saveDownload, updateDownload, deleteDownload } from '@/api/blog/download'
+  import { parseTime } from '@/utils/index'
+  import { getToken } from '@/utils/auth'
+  import { getTenant } from '@/utils/tenant'
+  import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 
-export default {
-  directives: {
-    clipboard
-  },
-  data() {
-    return {
-      size: 'small',
-      tableData: [],
-      query: {
-        name: ''
-      },
-      title: '',
-      dialogFormVisible: false, // 控制弹出框
-      formLabelWidth: '120px',
-      isEditForm: false,
-      currentPage: 1,
-      pageSize: 10,
-      total: 0, // 总数量
-      // 分类菜单列表
-      deptData: [],
-      // tree配置项
-      deptTreeProps: {
-        label: 'name',
-        children: 'children'
-      },
-      dataForm: {
+  export default {
+    directives: {
+      clipboard
+    },
+    data() {
+      return {
+        size: 'small',
+        tableData: [],
+        query: {
+          name: ''
+        },
         title: '',
-        descriptions: '',
-        fileSize: '',
-        type: '',
-        downloads: '',
-        endTime: '',
-        status: ''
+        dialogFormVisible: false, // 控制弹出框
+        formLabelWidth: '120px',
+        isEditForm: false,
+        currentPage: 1,
+        pageSize: 10,
+        total: 0, // 总数量
+        // 分类菜单列表
+        deptData: [],
+        // tree配置项
+        deptTreeProps: {
+          label: 'name',
+          children: 'children'
+        },
+        dataForm: {
+          title: '',
+          descriptions: '',
+          fileSize: '',
+          type: '',
+          downloads: '',
+          endTime: '',
+          status: ''
+        },
+        // 表单校验
+        dataRule: {
+          name: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }]
+        },
+        loading: false,
+        dialogVisible: false,
+        editLoading: false,
+        uploadHeaders:{}
+      }
+    },
+    created() {
+      this.getDownloadList()
+      this.uploadHeaders={
+        'Authorization': 'Bearer ' + getToken(),
+      }
+    },
+    methods: {
+      parseTime,
+      clipboardSuccess() {
+        this.$message({
+          message: '复制成功',
+          type: 'success',
+          duration: 1500
+        })
       },
-      // 表单校验
-      dataRule: {
-        name: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }]
+      handleUploadPreview(file) {
+        console.log(file);
+        const isLt2M = file.size / 1024 / 1024 < 25;
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 25MB!');
+        }
+        return isLt2M;
       },
-      loading: false,
-      dialogVisible: false,
-      editLoading: false,
-      uploadHeaders:{}
-    }
-  },
-  created() {
-    this.getDownloadList()
-    this.uploadHeaders={
-      'Authorization': 'Bearer ' + getToken(),
-    }
-  },
-  methods: {
-    parseTime,
-  clipboardSuccess() {
-    this.$message({
-      message: '复制成功',
-      type: 'success',
-      duration: 1500
-    })
-  },
-    handleUploadPreview(file) {
-      console.log(file);
-      const isLt2M = file.size / 1024 / 1024 < 25;
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 25MB!');
-      }
-      return isLt2M;
-    },
-    handleUploadSuccess(res, file) {
-      if (res.code === 200) {
-        this.$message.success('上传成功')
-        this.dataForm.url=res.data.url
-        this.dataForm.fileSize=res.data.size
-        this.dataForm.originName=res.data.originName
-        console.log(JSON.stringify(this.dataForm))
+      handleUploadSuccess(res, file) {
+        if (res.code === 200) {
+          this.$message.success('上传成功')
+          this.dataForm.url=res.data.url
+          this.dataForm.fileSize=res.data.size
+          this.dataForm.originName=res.data.originName
+          console.log(JSON.stringify(this.dataForm))
 
-      } else {
-        this.$message.success(res.msg)
-      }
-    },
-    handleUploadError(err, file) {
-    this.$message.error("失败"+err)
-    },
-    getDownloadList: function() {
-      this.loading = true
-      const params = new URLSearchParams()
-      params.append('current', this.currentPage)
-      params.append('size', this.pageSize)
-      if (this.query.title) {
-        params.append('title', this.query.title)
-      }
-      getDownload(params).then(response => {
-        this.loading = false
-        this.tableData = response.data.data.records
-        this.total = response.data.data.total
-      })
-    },
-    // 查找
-    handleFind: function() {
-      this.getDownloadList()
-    },
-    handleReset: function() {
-      this.query = {
-        name: ''
-      }
-      this.getDownloadList()
-    },
-    // 换页
-    handleCurrentChange: function(val) {
-      this.currentPage = val
-      this.getDownloadList()
-    },
-    // 显示新增界面
-    handleAdd: function() {
-      this.dialogVisible = true
-      this.dataForm = {}
-    },
-    // 编辑界面
-    handleEdit: function(row) {
-      this.isEditForm = true
-      this.dialogVisible = true
-      this.dataForm = row
-    },
+        } else {
+          this.$message.success(res.msg)
+        }
+      },
+      handleUploadError(err, file) {
+        this.$message.error("失败"+err)
+      },
+      getDownloadList: function() {
+        this.loading = true
+        const params = new URLSearchParams()
+        params.append('current', this.currentPage)
+        params.append('size', this.pageSize)
+        if (this.query.title) {
+          params.append('title', this.query.title)
+        }
+        getDownload(params).then(response => {
+          this.loading = false
+          this.tableData = response.data.data.records
+          this.total = response.data.data.total
+        })
+      },
+      // 查找
+      handleFind: function() {
+        this.getDownloadList()
+      },
+      handleReset: function() {
+        this.query = {
+          name: ''
+        }
+        this.getDownloadList()
+      },
+      // 换页
+      handleCurrentChange: function(val) {
+        this.currentPage = val
+        this.getDownloadList()
+      },
+      // 显示新增界面
+      handleAdd: function() {
+        this.dialogVisible = true
+        this.dataForm = {}
+      },
+      // 编辑界面
+      handleEdit: function(row) {
+        this.isEditForm = true
+        this.dialogVisible = true
+        this.dataForm = row
+      },
 
-    handleDelete: function(row) {
-      const that = this
-      this.$confirm('此操作将删除【' + row.title + '】文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          deleteDownload(row.id).then(response => {
-            if (response.data.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功'
-              })
-              that.getDownloadList()
-            } else {
-              this.$message({
-                type: 'error',
-                message: response.data.msg
+      handleDelete: function(row) {
+        const that = this
+        this.$confirm('此操作将删除【' + row.title + '】文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            deleteDownload(row.id).then(response => {
+              if (response.data.code === 200) {
+                this.$message({
+                  type: 'success',
+                  message: '操作成功'
+                })
+                that.getDownloadList()
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: response.data.msg
+                })
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
+      },
+      submitEditForm: function() {
+        if (this.isEditForm) {
+          this.$refs['dataForm'].validate((valid) => {
+            if (valid) {
+              this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                this.editLoading = true
+                updateDownload(this.dataForm).then((res) => {
+                  if (res.data.code === 200) {
+                    this.$message({ message: '操作成功', type: 'success' })
+                  } else {
+                    this.$message({ message: res.data.msg, type: 'error' })
+                  }
+                  this.editLoading = false
+                  this.$refs['dataForm'].resetFields()
+                  this.dialogVisible = false
+                  this.getDownloadList()
+                })
               })
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-    },
-    submitEditForm: function() {
-      if (this.isEditForm) {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.editLoading = true
-              updateDownload(this.dataForm).then((res) => {
-                if (res.data.code === 200) {
-                  this.$message({ message: '操作成功', type: 'success' })
-                } else {
-                  this.$message({ message: res.data.msg, type: 'error' })
-                }
-                this.editLoading = false
-                this.$refs['dataForm'].resetFields()
-                this.dialogVisible = false
-                this.getDownloadList()
-              })
-            })
-          }
-        })
-      } else {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              console.log(this.dataForm)
-              saveDownload(this.dataForm).then((res) => {
-                this.editLoading = true
-                if (res.data.code === 200) {
-                  this.$message({ message: '操作成功', type: 'success' })
-                } else {
-                  this.$message({ message: res.data.msg, type: 'error' })
-                }
-                this.editLoading = false
-                this.$refs['dataForm'].resetFields()
-                this.dialogVisible = false
-                this.getDownloadList()
-              })
-            })
-          }
-        })
-      }
-
-    },
-    getType(type) {
-      switch (type) {
-        case 0:
-          return "文档"
-        case 1:
-          return "代码"
-        case 2:
-          return "工具"
-        case 3:
-          return "其他"
-      }
-    },
-    getDimens(number) {
-      try {
-        if (number > 1024 * 1024) {
-          return (number / (1024 * 1024)).toFixed(2) + 'MB'
-        } else if (number > 1024) {
-          return (number / 1024).toFixed(2) + 'KB'
         } else {
-          return number + 'Byte'
+          this.$refs['dataForm'].validate((valid) => {
+            if (valid) {
+              this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                console.log(this.dataForm)
+                saveDownload(this.dataForm).then((res) => {
+                  this.editLoading = true
+                  if (res.data.code === 200) {
+                    this.$message({ message: '操作成功', type: 'success' })
+                  } else {
+                    this.$message({ message: res.data.msg, type: 'error' })
+                  }
+                  this.editLoading = false
+                  this.$refs['dataForm'].resetFields()
+                  this.dialogVisible = false
+                  this.getDownloadList()
+                })
+              })
+            }
+          })
         }
-      } catch (e) {
-        return '未知大小'
+
+      },
+      getType(type) {
+        switch (type) {
+          case 0:
+            return "文档"
+          case 1:
+            return "代码"
+          case 2:
+            return "工具"
+          case 3:
+            return "其他"
+        }
+      },
+      getDimens(number) {
+        try {
+          if (number > 1024 * 1024) {
+            return (number / (1024 * 1024)).toFixed(2) + 'MB'
+          } else if (number > 1024) {
+            return (number / 1024).toFixed(2) + 'KB'
+          } else {
+            return number + 'Byte'
+          }
+        } catch (e) {
+          return '未知大小'
+        }
       }
     }
   }
-}
 </script>

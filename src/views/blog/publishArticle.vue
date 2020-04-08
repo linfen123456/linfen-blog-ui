@@ -139,6 +139,7 @@ import { mapGetters } from 'vuex'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 import { getIamge } from '../../api/blog/restTemplate'
+import { ARTICLE_HALF } from '../../store/mutation'
 
 export default {
   name: 'PublishArticle',
@@ -186,8 +187,15 @@ export default {
       this.articleId = (data).substring(data.indexOf('|') + 1, data.lastIndexOf('|'))
       this.getArticleById()
     } catch (e) {
+      var item=localStorage.getItem(ARTICLE_HALF)
+      if (item) {
+          let a=JSON.parse(item)
+        this.dataForm=a
+      }
 
     }
+
+
     this.getCategory()
     this.getTag()
   },
@@ -247,7 +255,7 @@ export default {
           'Authorization': 'Bearer ' + getToken()
         },
         method: 'get',
-        url: '/pre/restTemplate/image',
+        url: '/linfen/restTemplate/image',
         data: ''
       })
         .then(function (response) {
@@ -267,6 +275,8 @@ export default {
     submitEditForm: function(isHalf) {
       if (isHalf === 3) {
         this.dataForm.isView = 3
+        localStorage.setItem(ARTICLE_HALF,JSON.stringify(this.dataForm))
+        this.$message.success("本地草稿存储成功")
       }
       if (this.articleId != -1) {
         this.$refs['dataForm'].validate((valid) => {
@@ -304,7 +314,14 @@ export default {
       }
     },
     cancleSubit() {
-      this.$confirm('确认取消吗？', '提示', {}).then(() => {
+      let data=''
+      if (localStorage.getItem(ARTICLE_HALF))
+          data='本地草稿将会本删除，'
+      this.$confirm(data+'确认取消吗？', '提示', {}).then(() => {
+        if (data) {
+          localStorage.removeItem(ARTICLE_HALF)
+          this.$message.error("本地草稿删除成功")
+        }
         this.$router.push({ path: '/page/article' })
       })
     },

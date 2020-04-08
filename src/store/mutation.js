@@ -1,5 +1,6 @@
 
 export const BASIC_INFO = 'BASIC_INFO'
+export const ARTICLE_HALF = 'ARTICLE_HALF'
 
 /**
  * 获取网站基本信息

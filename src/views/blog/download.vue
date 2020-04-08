@@ -55,7 +55,7 @@
 
       <el-table-column label="大小" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.fileSize }}</span>
+          <span>{{getDimens(scope.row.fileSize)}}</span>
         </template>
       </el-table-column>
 
@@ -124,7 +124,7 @@
         <el-form-item label="上传文件" prop="title" :label-width="formLabelWidth">
           <el-upload
             drag
-            action="/pre/qiniu/upload"
+            action="/linfen/qiniu/upload"
             :before-upload="handleUploadPreview"
             :on-success="handleUploadSuccess"
             :on-error="handleUploadError"
@@ -156,7 +156,11 @@
 
 
         <el-form-item label="原文件名" prop="originName" :label-width="formLabelWidth">
-          <el-input  :disabled="true" v-model="dataForm.originName" placeholder="请输入原文件名" />
+          <el-input  :disabled="true" v-model="dataForm.originName" placeholder="请输入原文件名" >
+            <el-button slot="append" v-if="dataForm.originName" v-clipboard:copy="dataForm.originName" v-clipboard:success="clipboardSuccess" type="primary">
+              复制
+            </el-button>
+          </el-input>
         </el-form-item>
 
 
@@ -263,7 +267,7 @@ export default {
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
         this.$message.success('上传成功')
-        this.dataForm.url="/pre/qiniu/file/"+res.data.fileName
+        this.dataForm.url=res.data.url
         this.dataForm.fileSize=res.data.size
         this.dataForm.originName=res.data.originName
         console.log(JSON.stringify(this.dataForm))
@@ -399,6 +403,19 @@ export default {
           return "工具"
         case 3:
           return "其他"
+      }
+    },
+    getDimens(number) {
+      try {
+        if (number > 1024 * 1024) {
+          return (number / (1024 * 1024)).toFixed(2) + 'MB'
+        } else if (number > 1024) {
+          return (number / 1024).toFixed(2) + 'KB'
+        } else {
+          return number + 'Byte'
+        }
+      } catch (e) {
+        return '未知大小'
       }
     }
   }

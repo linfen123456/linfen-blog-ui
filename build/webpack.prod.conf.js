@@ -154,8 +154,9 @@ if (config.build.productionGzip) {
       test: new RegExp(
         '\\.(' + config.build.productionGzipExtensions.join('|') + ')$'
       ),
-      threshold: 10240,
-      minRatio: 0.8
+      threshold: 1024,
+      minRatio: 0.8,
+      deleteOriginalAssets: false
     })
   )
 }

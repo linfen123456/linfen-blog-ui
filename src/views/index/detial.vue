@@ -308,7 +308,7 @@ export default {
           new Catalog({
             contentEl: 'articleContent',
             catalogEl: 'articleCategory',
-            selector: ['h2', 'h3'],
+            selector: ['h1','h2', 'h3', 'h4', 'h5', 'h6'],
             cool: false
           })
           /* new katelog({

@@ -33,17 +33,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="链接" width="250" align="center">
+      <el-table-column label="链接地址" width="250" align="center">
         <template slot-scope="scope">
-          <el-popover
-            placement="top"
-            title="链接"
-            width="500"
-            trigger="hover"
-          >
-            {{ scope.row.content }}
-            <span slot="reference">{{ scope.row.link==undefined||scope.row.link === ""||(scope.row.link.length < 20) ? scope.row.link :scope.row.link.substring(0,20)+'...' }}</span>
-          </el-popover>
+            {{ scope.row.link }}
         </template>
       </el-table-column>
 

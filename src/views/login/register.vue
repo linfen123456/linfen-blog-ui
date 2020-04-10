@@ -21,9 +21,12 @@
           <el-form-item prop="phone">
             <el-input v-model="registerForm.phone" auto-complete="off" placeholder="请输入手机号" />
           </el-form-item>
+          <el-form-item prop="email">
+            <el-input v-model="registerForm.email" auto-complete="off" placeholder="请输入邮箱" />
+          </el-form-item>
           <el-form-item prop="smsCode" class="code">
             <el-input v-model="registerForm.smsCode" placeholder="验证码" style="width: 234px;" />
-            <el-button type="primary" :disabled="isDisabled" @click="sendCode">{{ buttonText }}</el-button>
+            <el-button type="primary" :disabled="isDisabled" @click="sendEmailCode">{{ buttonText }}</el-button>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="registerForm.password" type="password" auto-complete="off" placeholder="输入密码" />
@@ -47,7 +50,7 @@
 </template>
 
 <script>
-import { registerUser, sendSms } from '@/api/user'
+import { registerUser, sendSms , sendEmail } from '@/api/user'
 import { getBasicInfo } from '@/store/mutation'
 export default {
   name: 'Register',
@@ -62,6 +65,18 @@ export default {
         callback()
       }
     }
+
+    // 验证手机号是否合法
+    const checkEmail = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入邮箱'))
+      } else if (!this.checkEmail(value)) {
+        callback(new Error('邮箱地址不合法'))
+      } else {
+        callback()
+      }
+    }
+
     // 验证码是否为空
     const checkSmscode = (rule, value, callback) => {
       if (value === '') {
@@ -70,6 +85,7 @@ export default {
         callback()
       }
     }
+
     // 验证密码
     const validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -97,6 +113,7 @@ export default {
         password: '',
         checkPass: '',
         phone: '',
+        email: '',
         smsCode: ''
       },
       rules2: {
@@ -111,6 +128,7 @@ export default {
         }, { validator: validatePass, trigger: 'change' }],
         checkPass: [{ validator: validatePass2, trigger: 'change' }],
         phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { validator: checkTel, trigger: 'change' }],
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { validator: checkEmail, trigger: 'change' }],
         smsCode: [{ validator: checkSmscode, trigger: 'change' }]
       },
       buttonText: '发送验证码',
@@ -127,6 +145,38 @@ export default {
       if (this.checkMobile(phone)) {
         console.log(phone)
         sendSms(phone).then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              showClose: true,
+              message: '发送成功，验证码有效期2分钟',
+              type: 'success'
+            })
+            let time = 60
+            this.buttonText = '已发送'
+            this.isDisabled = true
+            if (this.flag) {
+              this.flag = false
+              const timer = setInterval(() => {
+                time--
+                this.buttonText = time + ' 秒'
+                if (time === 0) {
+                  clearInterval(timer)
+                  this.buttonText = '重新获取'
+                  this.isDisabled = false
+                  this.flag = true
+                }
+              }, 1000)
+            }
+          }
+        })
+      }
+    },
+    //发送邮箱验证码
+    sendEmailCode() {
+      const email = this.registerForm.email
+      if (this.checkEmail(email)) {
+        console.log(email)
+        sendEmail(email).then(res => {
           if (res.data.code === 200) {
             this.$message({
               showClose: true,
@@ -191,6 +241,11 @@ export default {
     // 验证手机号
     checkMobile(str) {
       const reg = /^1[3456789]\d{9}$/
+      return reg.test(str)
+    },
+    // 验证邮箱
+    checkEmail(str) {
+      const reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
       return reg.test(str)
     }
   }

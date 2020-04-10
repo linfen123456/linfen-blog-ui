@@ -46,6 +46,9 @@
                   <el-form-item label="用户名">
                     <el-input v-model="user.username" />
                   </el-form-item>
+                  <el-form-item label="昵称">
+                    <el-input v-model="user.nickname" />
+                  </el-form-item>
                   <el-form-item label="头像">
                     <el-upload
                       class="avatar-uploader"
@@ -58,7 +61,7 @@
                     </el-upload>
                   </el-form-item>
                   <el-form-item label="手机号">
-                    <el-input v-model="user.phone" />
+                    <el-input v-model="user.phone" :disabled="true"/>
                   </el-form-item>
                   <el-form-item label="用户邮箱">
                     <el-input v-model="user.email" :disabled="true" />
@@ -68,7 +71,7 @@
                   </el-form-item>
 
                   <el-form-item>
-                    <el-button type="primary">提交</el-button>
+                    <el-button type="primary" @click="updateUserInfo">提交</el-button>
                     <el-button>取消</el-button>
                   </el-form-item>
                 </el-form>
@@ -150,7 +153,7 @@
 
 <script>
 import PanThumb from '@/components/PanThumb'
-import { getUserInfo, updatePass, resetEmail, updateEmail } from '@/api/user'
+import { getUserInfo,editUserInfo, updatePass, resetEmail, updateEmail } from '@/api/user'
 
 export default {
   name: 'Index',
@@ -178,6 +181,7 @@ export default {
     return {
       user: {
         avatar: '',
+        nickname: '',
         username: '',
         phone: 0,
         email: '',
@@ -237,6 +241,22 @@ export default {
     findUserInfo: function() {
       getUserInfo().then((res) => {
         this.user = res.data.data
+      })
+    },
+    // 加载用户个人信息
+    updateUserInfo: function() {
+      const userInfo={
+        avatar: this.user.avatar,
+        nickname: this.user.nickname,
+        username: this.user.username,
+        userId: this.user.userId,
+      }
+      editUserInfo(userInfo).then((res) => {
+        if (res.data.code === 200) {
+          this.$message.success('修改成功')
+        } else {
+          this.$message.error("修改失败")
+        }
       })
     },
 
@@ -417,7 +437,7 @@ export default {
 <style lang="scss" scoped>
 
   .user-center{
-    height: 440px;
+    height: 520px;
   }
   .box-center {
     margin: 0 auto;

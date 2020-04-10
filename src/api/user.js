@@ -18,10 +18,20 @@ export function getUserList(parms) {
   })
 }
 
-// 编辑用户
+// 更新用户包括角色和部门
 export function editUser(data) {
   return request({
     url: '/user',
+    method: 'put',
+    data: data
+  })
+}
+
+
+// 编辑用户基本信息
+export function editUserInfo(data) {
+  return request({
+    url: '/user/userinfo',
     method: 'put',
     data: data
   })
@@ -82,6 +92,14 @@ export function resetEmail(parms) {
 export function sendSms(phone) {
   return request({
     url: '/auth/sendCode/' + phone,
+    method: 'post'
+  })
+}
+
+// 发送邮箱验证码
+export function sendEmail(phone) {
+  return request({
+    url: '/auth/sendEmailCode/' + phone,
     method: 'post'
   })
 }

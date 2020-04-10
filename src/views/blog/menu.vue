@@ -150,8 +150,7 @@
                 <div slot="content">
                   <p>URL格式：</p>
                   <p>1.常规业务开发的功能URL，如用户管理，Views目录下页面路径为 @view/sys/user, 此处填写 sys/user。</p>
-                  <p>2.嵌套外部网页，如通过菜单打开百度网页，此处填写 http://www.baidu.com，http:// 不可省略。</p>
-                  <p>示例：用户管理：/sys/user 嵌套百度：http://www.baidu.com 嵌套网页：http://127.0.0.1:8000</p></div>
+                  <p>示例：用户管理：/sys/user </p></div>
                 <i class="el-icon-warning" />
               </el-tooltip>
             </el-col>
@@ -159,7 +158,20 @@
         </el-form-item>
 
         <el-form-item v-if="dataForm.type !== 2" label="菜单URL" prop="url">
-          <el-input v-model="dataForm.path" placeholder="菜单URL" />
+          <el-row>
+          <el-col :span="22">
+            <el-input v-model="dataForm.path" placeholder="菜单URL" />
+          </el-col>
+          <el-col :span="2" class="icon-list__tips">
+            <el-tooltip placement="top" effect="light" style="padding: 10px;">
+              <div slot="content">
+                <p>URL格式：</p>
+                <p>1.嵌套外部网页，如通过菜单打开百度网页，此处填写 http://www.baidu.com，http:// 不可省略。</p>
+                <p>内部菜单选择否，示例嵌套百度：http://www.baidu.com 嵌套网页：http://127.0.0.1:8000</p></div>
+              <i class="el-icon-warning" />
+            </el-tooltip>
+          </el-col>
+          </el-row>
         </el-form-item>
 
         <el-form-item v-if="dataForm.type !== 2" label="排序编号" prop="sort">

@@ -47,6 +47,15 @@ export const getPageById = (id) => {
   })
 }
 
+// 获取页面列表
+export const getPageByLink = (parms) => {
+  return request({
+    url: '/blog/page/link',
+    method: 'get',
+    params: parms
+  })
+}
+
 // 根据主键删除页面
 export const deletePage = (id) => {
   return request({

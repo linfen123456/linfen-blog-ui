@@ -15,6 +15,8 @@ const getters = {
   setting: state => state.user.setting,
   permission_routes: state => state.permission.routes,
   addRoutes: state => state.permission.addRoutes,
+  IndexRoutes: state => state.IndexPermission.IndexRoutes,
+  IndexAddRoutes: state => state.IndexPermission.IndexAddRoutes,
   errorLogs: state => state.errorLog.logs,
   baseInfo: state => state.basicInfo.basicInfo
 }

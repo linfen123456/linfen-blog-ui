@@ -9,7 +9,7 @@
         mode="horizontal"
         style="border: none;"
       >
-        <sidebar-item v-for="route in getIndexRotes()" :key="route.path" style="float: left;width: 60px;text-align: center;" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in IndexRoutes" :key="route.path" style="float: left;width: 60px;text-align: center;" :item="route" :base-path="route.path" />
 
       </el-menu>
     </el-scrollbar>
@@ -27,7 +27,7 @@ export default {
   components: { SidebarItem, Logo, AppLink },
   computed: {
     ...mapGetters([
-      'permission_routes',
+      'IndexRoutes',
       'sidebar'
     ]),
     variables() {

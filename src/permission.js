@@ -13,11 +13,22 @@ const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', 
 router.beforeEach((to, from, next) => {
   NProgress.start()
 
+
   /** 拉取网站基本信息**/
   if (!localStorage.getItem(BASIC_INFO)) {
     store.dispatch('getBasicInfo').then(res => {
+
     })
   }
+
+  if (store.getters.IndexAddRoutes.length === 0) {
+    store.dispatch('GenerateIndexRoutes').then(accessRoutes => {
+      // 根据roles权限生成可访问的路由表
+      router.addRoutes(accessRoutes) // 动态添加可访问路由表
+      next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+    })
+  }
+
 
   if (getToken()) {
     /* has token*/

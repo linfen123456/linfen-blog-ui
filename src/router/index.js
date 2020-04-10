@@ -13,13 +13,13 @@ export const constantRoutes = [
     component: IndexLayout,
     redirect: '/index',
     children: [
-      {
+     {
         path: '/index',
         component: () => import('@/views/index/index'),
         name: 'index',
         meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
       },
-      {
+      /*{
         path: '/classify',
         component: () => import('@/views/index/classify'),
         name: 'classify',
@@ -48,7 +48,7 @@ export const constantRoutes = [
         component: () => import('@/views/index/link'),
         name: 'link',
         meta: { title: '友联', icon: 'link', noCache: true, affix: true }
-      },
+      },*/
       {
         path: '/detial',
         component: () => import('@/views/index/detial'),

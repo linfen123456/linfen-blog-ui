@@ -238,7 +238,7 @@ import '../../components/ProgressCatalog/progress-catalog.css'
 import 'element-ui/lib/theme-chalk/display.css';
 
 export default {
-  name: 'Detial',
+  name: 'page',
   data() {
     return {
       dialogUserFormVisible: false,
@@ -263,7 +263,8 @@ export default {
     }
   },
   created() {
-    this.articleId = this.$route.query.articleId
+    this.articleId = this.$route.params.pageId
+    alert(this.articleId)
     this.getArticleById()
   },
   computed: {

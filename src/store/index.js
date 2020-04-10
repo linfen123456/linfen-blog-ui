@@ -8,6 +8,7 @@ import user from './modules/user'
 import setting from './modules/setting'
 import getters from './getters'
 import basicInfo from './modules/basicInfo'
+import IndexPermission from './modules/IndexPermission'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     app,
     errorLog,
     permission,
+    IndexPermission,
     tagsView,
     user,
     setting,

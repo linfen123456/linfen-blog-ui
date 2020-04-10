@@ -93,7 +93,7 @@ export default {
       if (isExternal(routePath)) {
         return routePath
       }
-      return path.resolve(this.basePath, routePath)
+      return path.resolve(this.basePath.replace(/:\w+/g,routePath), routePath)//对把参数替换为内容
     }
   }
 }

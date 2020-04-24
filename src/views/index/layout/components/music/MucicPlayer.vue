@@ -110,7 +110,8 @@ export default {
         }
         that.muclicViewVisiable = true
       }).catch(function(error) {
-        alert('获取失败' + error)
+        // alert('获取失败' + error)
+        that.$message.warning('音乐接口已变更~')
       })
     },
     // 鼠标移入

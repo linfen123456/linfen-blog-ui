@@ -4,9 +4,9 @@
       <el-header style="border-bottom: #dddddd 1px solid">
         <el-backtop :right="25">
           <div
-            style="width: 2px;height: 1500px; color:black;background: #444444;position: absolute;bottom: 45px; right: 11px"
-          />
-          <img style="width: 80px;height: 80px" width="80px" height="80px" :src="backUp"/>
+            style="width: 2px;height: 1500px; color:black;background: #444444;position: absolute;bottom: 45px; right: 14px"
+          ></div>
+          <img style="width: 50px;height: 50px" width="50px" height="50px" :src="backUp"/>
 
         </el-backtop>
         <Header />

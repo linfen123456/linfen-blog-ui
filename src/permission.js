@@ -8,7 +8,7 @@ import { BASIC_INFO } from './store/mutation'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/', '/index', '/classify', '/pigeonhole', '/tag', '/link', '/about', '/detial', '/search']//
+const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/', '/index', '/classify/index', '/pigeonhole/index', '/tag/index', '/link/index', '/about/index', '/detial/index', '/search']//
 
 router.beforeEach((to, from, next) => {
   NProgress.start()

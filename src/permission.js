@@ -8,7 +8,7 @@ import { BASIC_INFO } from './store/mutation'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/', '/index', '/classify/index', '/pigeonhole/index', '/tag/index', '/link/index', '/about/index', '/detial/index', '/search']//
+const whiteList = ['/login', '/auth-redirect', '/bind', '/register', '/login1', '/', '/index',  '/search','/detial']//'/classify/index', '/pigeonhole/index', '/tag/index', '/link/index', '/about/index', '/detial/index',
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
@@ -22,6 +22,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (store.getters.IndexAddRoutes.length === 0) {
+
     store.dispatch('GenerateIndexRoutes').then(accessRoutes => {
       // 根据roles权限生成可访问的路由表
       router.addRoutes(accessRoutes) // 动态添加可访问路由表
@@ -67,8 +68,10 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    // 没有token
-    if (whiteList.indexOf(to.path) !== -1) {
+    // 没有token和排除首页菜单
+    if ((whiteList.indexOf(to.path) !== -1)
+      ||(JSON.stringify(store.getters.IndexAddRoutes)
+        .indexOf(to.path.replace("/index","")) !== -1)) {
       // 在免登录白名单，直接进入
       next()
     } else {

@@ -101,10 +101,10 @@ export default {
         that.musicList.shift()
         for (let i = 0; i < res.length; i++) {
           const music = {}
-          music.title = res[i].name
-          music.artist = res[i].artist
+          music.title = res[i].title
+          music.artist = res[i].author
           music.src = res[i].url
-          music.pic = res[i].cover
+          music.pic = res[i].pic
           music.lrc = res[i].lrc
           that.musicList.push(music)
         }

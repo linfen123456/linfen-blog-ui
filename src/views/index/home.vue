@@ -39,8 +39,8 @@
             <div>岗位管理 、字典管理 、操作日志 、异常日志 、代码生成</div>
             <div><a href="https://gitee.com/li_haodong/pre" target="_blank">详细介绍Pre </a></div>
           </el-collapse-item>
-        </el-collapse>-->
-      </span>
+        </el-collapse>
+      </span>-->
     </div>
   </div>
 </template>

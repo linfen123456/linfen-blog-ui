@@ -5,7 +5,7 @@ module.exports = {
 
   dev: {
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // assetsPublicPath: '/',//本地开发时运行需要注释掉
     proxyTable: {
       '/linfen': {
         target: 'http://localhost:8081',//后端接口地址

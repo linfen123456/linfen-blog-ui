@@ -15,7 +15,8 @@ npm install
 # 启动服务 localhost:9527
 npm run dev
 
-# 构建生产环境
-npm run build
+# 构建生产环境（config/index.js下面这行代码解开注释assetsPublicPath: '/'）
+
+npm run build:prod
 ```
 

@@ -94,7 +94,7 @@ export default {
     getMusicList() {
       const params = new URLSearchParams()
       const that = this
-      axios.get('https://api.i-meto.com/meting/api?server=netease&type=playlist&id=35798529', { // 还可以直接把参数拼接在url后边
+      axios.get('https://api.i-meto.com/meting/api?server=netease', { // 还可以直接把参数拼接在url后边
         params: {}
       }).then(function(data) {
         const res = data.data

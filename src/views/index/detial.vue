@@ -40,7 +40,7 @@
               <el-divider />
 
               <div class="list-main-item-cover">
-                <img :src="articleData.cover?articleData.cover:'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php'" width="100%" height="250px">
+                <img :src="articleData.cover?articleData.cover:getImageUrl()" width="100%" height="250px">
               </div>
 
               <el-row class="margin-top-12">
@@ -236,6 +236,7 @@ import { mapGetters } from 'vuex'
 import Catalog from '../../components/ProgressCatalog'
 import '../../components/ProgressCatalog/progress-catalog.css'
 import 'element-ui/lib/theme-chalk/display.css';
+import { getBasicInfo } from '../../store/mutation'
 
 export default {
   name: 'Detial',
@@ -420,7 +421,10 @@ export default {
           this.$message.error('评论失败')
         }
       })
-    }
+    },
+  getImageUrl(){
+    return getBasicInfo('random_img', 'http://www.dmoe.cc/random.php');
+  }
   }
 
 }

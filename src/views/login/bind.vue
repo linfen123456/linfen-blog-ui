@@ -8,7 +8,7 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane name="bind">
-          <span slot="label"><i slot="prefix" class=""><svg-icon icon-class="user" /></i> 绑定Pre账号</span>
+          <span slot="label"><i slot="prefix" class=""><svg-icon icon-class="user" /></i> 绑定淋汾博客账号</span>
           <el-form
             ref="bindForm"
             :model="bindForm"
@@ -16,13 +16,12 @@
             class="login-form"
             label-position="left"
           >
-            <el-form-item prop="username">
+            <el-form-item prop="username">淋汾博客
               <el-input
                 v-model="bindForm.username"
                 placeholder="请输入账号"
                 type="text"
                 autocomplete="off"
-                value=""
               >
                 <i slot="prefix" class="">
                   <svg-icon icon-class="user1" />

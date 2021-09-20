@@ -106,7 +106,7 @@
 
     <el-dialog width="600px" title="选择封面" :visible.sync="dialogCoverVisible">
       <div style="width: 500px;height: 300px">
-        <el-image style="width: 500px; height: auto;max-height: 320px" :src="coverList[coverPosition].imgurl" lazy />
+        <el-image style="width: 500px; height: auto;max-height: 320px" :src="coverList[coverPosition]" lazy />
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="getPreImage">上一张</el-button>
@@ -177,7 +177,7 @@ export default {
       articleId: -1,
       dialogCoverVisible: false,
       dialogCoverPreVisible: false,
-      coverList: [{imgUrl:''}],
+      coverList: [''],
       coverPosition:0
     }
   },
@@ -228,7 +228,7 @@ export default {
       })
     },
     selectImageCover() {
-      this.dataForm.cover = this.coverList[this.coverPosition].imgurl
+      this.dataForm.cover = this.coverList[this.coverPosition]
       this.dialogCoverVisible = false
     },
     getPreImage() {

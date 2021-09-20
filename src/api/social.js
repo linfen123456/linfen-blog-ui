@@ -25,3 +25,15 @@ export function untied(parms) {
     params: parms
   })
 }
+
+/**
+ * 第三方登录
+ * @param parms
+ */
+export function auth(type) {
+  return request({
+    url: '/authLogin/'+type,
+    method: 'post',
+    params: ''
+  })
+}

@@ -185,7 +185,7 @@
             </svg>
             <!--</a>-->
           </span>
-          <span class="other-icon" @click="handleSocial('weixin')">
+          <span class="other-icon" @click="handleSocial('wechat')">
             <!--<a href='http://localhost:8081/auth/gitee'>-->
             <svg
               t="1566549849419"
@@ -229,6 +229,7 @@ import { isvalidPhone } from '@/utils/validate'
 import { getImgCode } from '@/api/login'
 import { sendSms } from '@/api/user'
 import { getBasicInfo } from '../../store/mutation'
+import { auth } from '../../api/social'
 
 export default {
   name: 'Login',
@@ -358,21 +359,26 @@ export default {
       const _this = this
       var key = ''
       try {
-        key = getUrlKey('token')
-      } catch (e) {
+        key = getUrlKey('key')
+        _this.loginForm.token = key
+        if (this.loginForm.token != null && this.loginForm.token !== '') {
+          _this.isShow = false
+          _this.$message.info("正在第三方登录，请稍等")
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            this.loading = false
+            _this.$message.success("第三方登录成功")
+            this.$router.push({ path: this.redirect || '/' })
 
+          }).catch(() => {
+            _this.$message.error("第三方登录失败")
+            this.loading = false
+            // this.refreshCaptcha()
+          })
+
+        }
+      } catch (e) {
       }
-      _this.loginForm.token = key
-      if (this.loginForm.token != null && this.loginForm.token !== '') {
-        _this.isShow = false
-        this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-          this.loading = false
-          this.$router.push({ path: this.redirect || '/' })
-        }).catch(() => {
-          this.loading = false
-          this.refreshCaptcha()
-        })
-      }
+
     },
     // 发送短信验证码
     sendCode() {
@@ -418,9 +424,28 @@ export default {
       this.$refs[tab.paneName].resetFields()
     },
     handleSocial(path) {
-      this.currentPath = path
-      this.socialLoading = true
-      window.location.href = 'http://localhost:8081/auth/' + path
+      // this.currentPath = path
+      // this.socialLoading = true
+      // window.location.href = 'http://localhost:8081/auth/' + path
+      let obj = {};
+      //请求第三方授权登录
+      auth(path).then(res => {
+        if (res.data.code===200) {
+          if (res.data.data) {
+            // this.aouthUrl = res.result;
+            // this.aouthVisible = true;
+            window.location.href = res.data.data;
+            console.log(type + "请求第三方登录：" + JSON.stringify(res));
+          }
+
+        } else {
+          this.$message({
+            showClose: true,
+            message: '打开第三方登录失败',
+            type: 'error'
+          })
+        }
+      });
     },
     gotoRegister() {
       this.$router.push({

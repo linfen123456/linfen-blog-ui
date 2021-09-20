@@ -12,7 +12,7 @@
                   <el-row>
                     <el-col :span="24">
                       <div class="list-main-item-cover" @click="selectArticle(item)">
-                        <img :src="item.cover?item.cover:'https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php?test='+index" lazy style="width:100%;  height:250px">
+                        <img :src="item.cover?item.cover:getImageUrl()+'?test='+index" lazy style="width:100%;  height:250px">
                         <div class="list-main-item-title" style="">{{ item.title }}</div>
                       </div>
                     </el-col>
@@ -128,6 +128,8 @@ import csdn from '@/assets/icon/csdn.png'
 import { getAllPageArticle } from '@/api/blog/article'
 import { parseTime } from '@/utils/index'
 import 'element-ui/lib/theme-chalk/display.css';
+import { getBasicInfo } from '../../store/mutation'
+
 
 export default {
   name: 'Index',
@@ -185,6 +187,9 @@ export default {
     handleCurrentChange: function(val) {
       this.currentPage = val
       this.getArticleList()
+    },
+    getImageUrl(){
+      return getBasicInfo('random_img', 'http://www.dmoe.cc/random.php');
     }
   }
 }
